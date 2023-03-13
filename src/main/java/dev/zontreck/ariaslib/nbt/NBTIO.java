@@ -9,26 +9,33 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import dev.zontreck.ariaslib.events.EventBus;
+import dev.zontreck.ariaslib.events.NBTLoadFailedEvent;
 import dev.zontreck.ariaslib.events.NBTLoadedEvent;
 import dev.zontreck.ariaslib.events.NBTSavingEvent;
 
 public class NBTIO {
     public static CompoundTag read(File file) throws FileNotFoundException, IOException
     {
-        FileInputStream fis = new FileInputStream(file);
-        CompoundTag tag;
+        try{
 
-        DataInputStream dis = new DataInputStream(fis);
-        // Start loading
-        
-        // We can only be a compound tag
-        dis.skipBytes(1); // Skip the compound tag type bit
-        tag = (CompoundTag) TagTypes.Compound.type.load(dis);
-
-        EventBus.BUS.post(new NBTLoadedEvent(tag, file.getName()));
-
-        // Complete
-        return tag;
+            FileInputStream fis = new FileInputStream(file);
+            CompoundTag tag;
+    
+            DataInputStream dis = new DataInputStream(fis);
+            // Start loading
+            
+            // We can only be a compound tag
+            dis.skipBytes(1); // Skip the compound tag type bit
+            tag = (CompoundTag) TagTypes.Compound.type.load(dis);
+    
+            EventBus.BUS.post(new NBTLoadedEvent(tag, file.getName()));
+    
+            // Complete
+            return tag;
+        }catch(Exception e) {
+            EventBus.BUS.post(new NBTLoadFailedEvent(file.getName()));
+            return new CompoundTag();
+        }
         
         
     }

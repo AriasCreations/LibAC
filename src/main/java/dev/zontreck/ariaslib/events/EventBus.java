@@ -72,20 +72,17 @@ public class EventBus
             }
             List<EventContainer> containers = entry.getValue();
 
-            if(eventClazz.isInstance(Event.class))
+            if(eventClazz.equals(event.getClass()))
             {
                 for (EventContainer eventContainer : containers) {
                     try {
-                        eventContainer.function.invoke(event);
-                    } catch (IllegalAccessException e) {
-                        e.printStackTrace();
-                    } catch (IllegalArgumentException e) {
-                        e.printStackTrace();
-                    } catch (InvocationTargetException e) {
+                        //Event t = (Event)eventClazz.getConstructor().newInstance();
+                        eventContainer.function.invoke(eventContainer.containingClass, event);
+                    } catch (IllegalAccessException|IllegalArgumentException|InvocationTargetException | SecurityException e) {
                         e.printStackTrace();
                     }
 
-                    if(event.isCancelled()) cancelled=true;
+                    cancelled=event.isCancelled();
                 }
             }
         }
