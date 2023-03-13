@@ -16,22 +16,22 @@ import com.google.common.collect.Maps;
 
 public class EventsListenerList {
 
-    public Map<Class<?>, List<EventContainer>> events = Maps.newHashMap();
+    public Map<String, List<EventContainer>> events = Maps.newHashMap();
 
     public void addEventMethod(Class<?> e, Method action, Class<?> clazz)
     {
-
         // Add a new container!
         EventContainer contains = new EventContainer();
         contains.function=action;
         contains.containingClass = clazz;
         
-        if(!events.containsKey(e)){
+        if((events.entrySet().stream()
+                    .filter(entry -> entry.getKey() == e.getName()).count()) == 0){
             List<EventContainer> tmp = Lists.newArrayList();
             tmp.add(contains);
-            events.put(e, tmp);
+            events.put(e.getName(), tmp);
         }else {
-            events.get(e).add(contains);
+            events.get(e.getName()).add(contains);
         }
     }
     

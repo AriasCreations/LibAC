@@ -62,8 +62,14 @@ public class EventBus
     public boolean post(Event event)
     {
         boolean cancelled = false;
-        for (Map.Entry<Class<?>, List<EventContainer>> entry : listeners.events.entrySet()) {
-            Class<?> eventClazz = entry.getKey();
+        for (Map.Entry<String, List<EventContainer>> entry : listeners.events.entrySet()) {
+            Class<?> eventClazz;
+            try {
+                eventClazz = Class.forName(entry.getKey());
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+                return false;
+            }
             List<EventContainer> containers = entry.getValue();
 
             if(eventClazz.isInstance(Event.class))
