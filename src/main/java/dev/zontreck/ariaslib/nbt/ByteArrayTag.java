@@ -13,6 +13,7 @@ public class ByteArrayTag implements Tag
 
         @Override
         public ByteArrayTag load(DataInput input) throws IOException {
+            
             List<Byte> lst = new ArrayList<>();
             int count = input.readInt();
             while(count>0)
@@ -181,6 +182,17 @@ public class ByteArrayTag implements Tag
     public long[] asLongArray() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'asLongArray'");
+    }
+
+    public Tag parent;
+    @Override
+    public void setParent(Tag parent) {
+        this.parent=parent;
+    }
+
+    @Override
+    public Tag getParent() {
+        return parent;
     }
 
     

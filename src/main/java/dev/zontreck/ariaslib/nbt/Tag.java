@@ -31,6 +31,14 @@ public interface Tag {
 
 
     int TAG_INVALID = 1024;
+    
+    
+    void setParent(Tag parent);
+    Tag getParent();
+    default boolean canHaveName(){
+        if(getParent() instanceof ListTag) return false;
+        else return true;
+    }
 
     default String makeIndent(int num)
     {

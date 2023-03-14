@@ -26,7 +26,9 @@ public class NBTIO {
             
             // We can only be a compound tag
             dis.skipBytes(1); // Skip the compound tag type bit
+            String name = dis.readUTF();
             tag = (CompoundTag) TagTypes.Compound.type.load(dis);
+            tag.setName(name);
     
             EventBus.BUS.post(new NBTLoadedEvent(tag, file.getName()));
     

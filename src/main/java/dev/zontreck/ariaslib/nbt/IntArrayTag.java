@@ -180,4 +180,14 @@ public class IntArrayTag implements Tag
     }
 
     
+    public Tag parent;
+    @Override
+    public void setParent(Tag parent) {
+        this.parent=parent;
+    }
+
+    @Override
+    public Tag getParent() {
+        return parent;
+    }
 }

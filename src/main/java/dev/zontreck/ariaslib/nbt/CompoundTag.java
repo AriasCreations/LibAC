@@ -26,6 +26,10 @@ public class CompoundTag implements Tag
                 TagType<?> v = TagTypes.getType(type);
                 String tagName = input.readUTF();
                 Tag finalTag = v.load(input);
+                if(finalTag instanceof CompoundTag){
+                    ((CompoundTag)finalTag).setName(tagName);
+                }
+                finalTag.setParent(newTag);
                 newTag.put(tagName, finalTag);
             }
 
@@ -56,6 +60,10 @@ public class CompoundTag implements Tag
 
     @Override
     public void write(DataOutput output) throws IOException {
+        if(parent==null)
+        {
+            output.writeUTF(tagName);
+        }
         for (Map.Entry<String,Tag> it : list.entrySet()) {
             // We're saving everything now
             output.writeByte(it.getValue().getId());
@@ -63,6 +71,12 @@ public class CompoundTag implements Tag
             it.getValue().write(output);
         }
         output.writeByte(TAG_END);
+    }
+
+    public String tagName = "";
+    public void setName(String name)
+    {
+        tagName = name;
     }
 
     @Override
@@ -86,12 +100,15 @@ public class CompoundTag implements Tag
         String indent = makeIndent(indents);
         String indentInside = makeIndent(indents+1);
 
-        String ret = "\n"+indent+"{\n";
+        String ret = "";
+        
+        ret = "\n"+indent+getType().getPrettyName()+" ["+tagName+"] {\n";
         Iterator<Entry<String,Tag>> entries = list.entrySet().iterator();
         while(entries.hasNext())
         {
             Entry<String,Tag> entry = entries.next();
-            ret += indentInside+entry.getValue().getType().getPrettyName() + " ["+entry.getKey()+"]: ";
+            if(!(entry.getValue() instanceof CompoundTag))
+                ret += indentInside+entry.getValue().getType().getPrettyName() + " ["+entry.getKey()+"]: ";
             ret += entry.getValue().getAsString(indents+1);
 
             if(entries.hasNext())
@@ -126,12 +143,13 @@ public class CompoundTag implements Tag
 
     public void put(String name, Tag entry)
     {
+        entry.setParent(this);
         list.put(name, entry);
     }
 
     public void putString(String name, String value)
     {
-        list.put(name, StringTag.valueOf(value));
+        put(name, StringTag.valueOf(value));
     }
 
     public String getString(String name)
@@ -140,7 +158,7 @@ public class CompoundTag implements Tag
     }
     public void putByte(String name, byte value)
     {
-        list.put(name, ByteTag.valueOf(value));
+        put(name, ByteTag.valueOf(value));
     }
 
     public byte getByte(String name)
@@ -149,7 +167,7 @@ public class CompoundTag implements Tag
     }
     public void putDouble(String name, double value)
     {
-        list.put(name, DoubleTag.valueOf(value));
+        put(name, DoubleTag.valueOf(value));
     }
 
     public double getDouble(String name)
@@ -158,7 +176,7 @@ public class CompoundTag implements Tag
     }
     public void putFloat(String name, float value)
     {
-        list.put(name, FloatTag.valueOf(value));
+        put(name, FloatTag.valueOf(value));
     }
 
     public float getFloat(String name)
@@ -167,7 +185,7 @@ public class CompoundTag implements Tag
     }
     public void putInt(String name, int value)
     {
-        list.put(name, IntTag.valueOf(value));
+        put(name, IntTag.valueOf(value));
     }
 
     public int getInt(String name)
@@ -181,7 +199,7 @@ public class CompoundTag implements Tag
     }
     public void putLong(String name, long value)
     {
-        list.put(name, LongTag.valueOf(value));
+        put(name, LongTag.valueOf(value));
     }
 
     public long getLong(String name)
@@ -190,7 +208,7 @@ public class CompoundTag implements Tag
     }
     public void putShort(String name, short value)
     {
-        list.put(name, ShortTag.valueOf(value));
+        put(name, ShortTag.valueOf(value));
     }
 
     public short getShort(String name)
@@ -199,7 +217,7 @@ public class CompoundTag implements Tag
     }
     public void putByteArray(String name, byte[] value)
     {
-        list.put(name, ByteArrayTag.valueOf(value));
+        put(name, ByteArrayTag.valueOf(value));
     }
 
     public ByteArrayTag getByteArray(String name)
@@ -208,7 +226,7 @@ public class CompoundTag implements Tag
     }
     public void putIntArray(String name, int[] value)
     {
-        list.put(name, IntArrayTag.valueOf(value));
+        put(name, IntArrayTag.valueOf(value));
     }
 
     public IntArrayTag getIntArray(String name)
@@ -217,7 +235,7 @@ public class CompoundTag implements Tag
     }
     public void putLongArray(String name, long[] value)
     {
-        list.put(name, LongArrayTag.valueOf(value));
+        put(name, LongArrayTag.valueOf(value));
     }
 
     public LongArrayTag getLongArray(String name)
@@ -226,7 +244,7 @@ public class CompoundTag implements Tag
     }
     public void putCompound(String name, CompoundTag value)
     {
-        list.put(name, value);
+        put(name, value);
     }
 
     public CompoundTag getCompound(String name)
@@ -302,4 +320,14 @@ public class CompoundTag implements Tag
         throw new UnsupportedOperationException("Unimplemented method 'asLongArray'");
     }
     
+    public Tag parent=null;
+    @Override
+    public void setParent(Tag parent) {
+        this.parent=parent;
+    }
+
+    @Override
+    public Tag getParent() {
+        return parent;
+    }
 }

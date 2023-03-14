@@ -28,6 +28,7 @@ public class ListTag implements Tag
                 while(count>0)
                 {
                     Tag entry = typ.load(input);
+                    entry.setParent(newTag);
                     newTag.add(entry);
 
                     count--;
@@ -61,7 +62,9 @@ public class ListTag implements Tag
 
     @Override
     public void write(DataOutput output) throws IOException {
-        // Nothing to write here! We are the end tag
+        for (Tag tag : list) {
+            tag.write(output);
+        }
     }
 
     @Override
@@ -129,6 +132,7 @@ public class ListTag implements Tag
         if(type == TAG_END || type == (byte)value.getId())
         {
             type = (byte)value.getId();
+            value.setParent(this);
             list.add(value);
 
             return true;
@@ -213,4 +217,14 @@ public class ListTag implements Tag
         throw new UnsupportedOperationException("Unimplemented method 'asLongArray'");
     }
     
+    public Tag parent;
+    @Override
+    public void setParent(Tag parent) {
+        this.parent=parent;
+    }
+
+    @Override
+    public Tag getParent() {
+        return parent;
+    }
 }

@@ -133,4 +133,14 @@ public class LongTag implements Tag
         throw new UnsupportedOperationException("Unimplemented method 'asLongArray'");
     }
     
+    public Tag parent;
+    @Override
+    public void setParent(Tag parent) {
+        this.parent=parent;
+    }
+
+    @Override
+    public Tag getParent() {
+        return parent;
+    }
 }
