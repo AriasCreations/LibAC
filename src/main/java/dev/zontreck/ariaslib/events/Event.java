@@ -15,11 +15,11 @@ public abstract class Event {
         return isCancelled;
     }
 
-    public void setCancelled(boolean cancel) throws Exception
+    public void setCancelled(boolean cancel)
     {
         if(!isCancellable())
         {
-            throw new Exception("This event cannot be cancelled");
+            return;
         }
         isCancelled=cancel;
     }
