@@ -9,11 +9,13 @@ import dev.zontreck.ariaslib.util.DelayedExecutorService;
 public class ConsolePrompt implements Runnable
 {
     public static final Console console = System.console();
+    
+    
     @Override
     public void run()
     {
         // Print a prompt
-        console.printf("\n> ");
+        console.printf("\n"+Terminal.PREFIX+ " > ");
         String commandInput = console.readLine();
 
         CommandEvent event = new CommandEvent(commandInput);
