@@ -1,4 +1,4 @@
-package dev.zontreck.ariaslib.nbt;
+package dev.zontreck.ariaslib.nbt.old;
 
 import java.io.DataInput;
 import java.io.DataOutput;
@@ -6,36 +6,22 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-
-public class ListTag implements Tag
+public class ByteArrayTag implements Tag
 {
-    public static final TagType<ListTag> TYPE = new TagType<ListTag>() {
+    public static final TagType<ByteArrayTag> TYPE = new TagType<ByteArrayTag>() {
 
         @Override
-        public ListTag load(DataInput input) throws IOException {
-            ListTag newTag = new ListTag();
-            byte type = input.readByte();
+        public ByteArrayTag load(DataInput input) throws IOException {
+            
+            List<Byte> lst = new ArrayList<>();
             int count = input.readInt();
-            if(type == 0)
+            while(count>0)
             {
-                return newTag;
-            }
-            else{
-                // Read the entries
-                TagType<?> typ = TagTypes.getType(type);
-                while(count>0)
-                {
-                    Tag entry = typ.load(input);
-                    entry.setParent(newTag);
-                    newTag.add(entry);
-
-                    count--;
-                }
+                lst.add(input.readByte());
+                count--;
             }
 
-            return newTag;
+            return new ByteArrayTag(toArray(lst));
         }
 
         @Override
@@ -44,32 +30,33 @@ public class ListTag implements Tag
         }
 
         @Override
+        public boolean hasValue() {
+            return true;
+        }
+
+        @Override
         public String getName() {
-            return "List";
+            return "Byte_Array";
         }
 
         @Override
         public String getPrettyName() {
-            return "TAG_List";
-        }
-
-        @Override
-        public boolean hasValue() {
-            return true;
+            return "TAG_Byte_Array";
         }
         
     };
 
     @Override
     public void write(DataOutput output) throws IOException {
-        for (Tag tag : list) {
-            tag.write(output);
+        output.writeInt(value.length);
+        for (byte b : value) {
+            output.writeByte(b);
         }
     }
 
     @Override
     public int getId() {
-        return Tag.TAG_LIST;
+        return TAG_BYTE_ARRAY;
     }
 
     @Override
@@ -79,99 +66,79 @@ public class ListTag implements Tag
 
     @Override
     public Tag copy() {
-        return this;
-    }
-
-    @Override
-    public String getAsString(int indents) {
-
-        String indent = makeIndent(indents);
-        String indentInside = makeIndent(indents+1);
-
-        String ret = "\n" + indent +"[\n";
-        for (int i = 0; i< list.size(); i++)
-        {
-            Tag b = list.get(i);
-            ret += indentInside+b.getAsString(indents+1);
-
-            if((i+1) != list.size())
-            {
-                ret += ", ";
-            }
-            ret += "\n";
-
-        }
-
-        ret +=indent+ "]";
-        return ret;
+        return new ByteArrayTag(value);
     }
 
     @Override
     public String toString()
     {
-        // Return the values of getAsString
-        return getAsString(0);
-    }
-
-    private List<Tag> list;
-    private byte type = TAG_END;
-
-    public ListTag()
-    {
-        list = new ArrayList<>();
-        type = TAG_END;
-    }
-
-    public int size()
-    {
-        return list.size();
-    }
-
-    public boolean add(Tag value)
-    {
-        if(type == TAG_END || type == (byte)value.getId())
-        {
-            type = (byte)value.getId();
-            value.setParent(this);
-            list.add(value);
-
-            return true;
-        } else return false;
-    }
-
-    public Tag get(int num)
-    {
-        return list.get(num);
-    }
-
-    public void remove(int num)
-    {
-        list.remove(num);
-    }
-
-    public int indexOf(Tag tag)
-    {
-        return list.indexOf(tag);
-    }
-
-    public void clear()
-    {
-        list= Lists.newArrayList();
-        type=TAG_END;
+        return String.valueOf(value);
     }
 
     @Override
+    public String getAsString(int indents) {
+        
+        String indent = makeIndent(indents);
+        String indentInside = makeIndent(indents+1);
+
+        String ret = "\n" + indent + "[\n";
+
+        for (int i = 0; i< value.length; i++)
+        {
+            byte b = value[i];
+            ret += indentInside+String.valueOf(b);
+
+            if((i+1) != value.length)
+            {
+                ret += ", ";
+            }
+            ret+="\n";
+
+        }
+        
+
+        ret += indent+"]";
+        return ret;
+    }
+
+    private ByteArrayTag(byte[] value)
+    {
+        this.value=value;
+    }
+    private static byte[] toArray(List<Byte> entries)
+    {
+        byte[] ret = new byte[entries.size()];
+        int cur=0;
+        for(byte b : entries)
+        {
+            ret[cur] = b;
+            cur++;
+        }
+
+        return ret;
+    }
+
+    public static ByteArrayTag valueOf(byte[] b)
+    {
+        return new ByteArrayTag(b);
+    }
+    private byte[] value;
+
+    @Override
     public Byte asByte() {
+        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'asByte'");
     }
 
     @Override
     public Float asFloat() {
+        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'asFloat'");
     }
 
     @Override
     public String asString() {
+        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'asString'");
     }
 
@@ -201,8 +168,7 @@ public class ListTag implements Tag
 
     @Override
     public byte[] asByteArray() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'asByteArray'");
+        return value;
     }
 
     @Override
@@ -216,7 +182,7 @@ public class ListTag implements Tag
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'asLongArray'");
     }
-    
+
     public Tag parent;
     @Override
     public void setParent(Tag parent) {
@@ -227,4 +193,6 @@ public class ListTag implements Tag
     public Tag getParent() {
         return parent;
     }
+
+    
 }

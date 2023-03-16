@@ -1,48 +1,47 @@
-package dev.zontreck.ariaslib.nbt;
+package dev.zontreck.ariaslib.nbt.old;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-public class ByteTag implements Tag
-{
-    public static final TagType<ByteTag> TYPE = new TagType<ByteTag>() {
-
+public class StringTag implements Tag{
+    
+    public static final TagType<StringTag> TYPE = new TagType<StringTag>() {
         @Override
-        public ByteTag load(DataInput input) throws IOException {
-            return ByteTag.valueOf(input.readByte());
+        public StringTag load(DataInput input) throws IOException {
+            return StringTag.valueOf(input.readUTF());
         }
 
         @Override
         public void skip(DataInput input) throws IOException {
-            input.skipBytes(1);
+            input.readUTF();
+        }
+
+        @Override
+        public String getName() {
+            return "String";
+        }
+
+        @Override
+        public String getPrettyName() {
+            return "TAG_String";
         }
 
         @Override
         public boolean hasValue() {
             return true;
         }
-
-        @Override
-        public String getName() {
-            return "Byte";
-        }
-
-        @Override
-        public String getPrettyName() {
-            return "TAG_Byte";
-        }
         
     };
 
     @Override
     public void write(DataOutput output) throws IOException {
-        output.writeByte(value);
+        output.writeUTF(toString());
     }
 
     @Override
     public int getId() {
-        return TAG_BYTE;
+        return TAG_STRING;
     }
 
     @Override
@@ -52,48 +51,46 @@ public class ByteTag implements Tag
 
     @Override
     public Tag copy() {
-        return new ByteTag(value);
+        return new StringTag(value);
+    }
+
+    @Override
+    public String getAsString(int indents) {
+        return "\""+value+"\"";
     }
 
     @Override
     public String toString()
     {
-        return String.valueOf(value);
+        return value;
     }
 
-    @Override
-    public String getAsString(int indents) {
-
-        String val = String.valueOf(value);
-        val+="b";
-        return val;
+    public static StringTag valueOf(String input) {
+        if(input instanceof String)
+        {
+            return new StringTag(input);
+        } else return null;
     }
 
-    private ByteTag(byte value)
+    private StringTag(String input)
     {
-        this.value=value;
+        this.value=input;
     }
-    public static ByteTag valueOf(byte b)
-    {
-        return new ByteTag(b);
-    }
-    private byte value;
+    private String value;
 
     @Override
     public Byte asByte() {
-        return value;
+        throw new UnsupportedOperationException("Unimplemented method 'asByte'");
     }
 
     @Override
     public Float asFloat() {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'asFloat'");
     }
 
     @Override
     public String asString() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'asString'");
+        return value;
     }
 
     @Override
@@ -137,7 +134,7 @@ public class ByteTag implements Tag
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'asLongArray'");
     }
-
+    
     public Tag parent;
     @Override
     public void setParent(Tag parent) {
@@ -148,5 +145,4 @@ public class ByteTag implements Tag
     public Tag getParent() {
         return parent;
     }
-    
 }

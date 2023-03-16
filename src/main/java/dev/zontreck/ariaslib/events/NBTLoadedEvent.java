@@ -1,8 +1,6 @@
 package dev.zontreck.ariaslib.events;
 
-import java.io.File;
-
-import dev.zontreck.ariaslib.nbt.CompoundTag;
+import dev.zontreck.ariaslib.nbt.old.CompoundTag;
 
 /**
  * This event cannot be cancelled.

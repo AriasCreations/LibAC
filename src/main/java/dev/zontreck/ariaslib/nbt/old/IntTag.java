@@ -1,21 +1,21 @@
-package dev.zontreck.ariaslib.nbt;
+package dev.zontreck.ariaslib.nbt.old;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-public class DoubleTag implements Tag
+public class IntTag implements Tag
 {
-    public static final TagType<DoubleTag> TYPE = new TagType<DoubleTag>() {
+    public static final TagType<IntTag> TYPE = new TagType<IntTag>() {
 
         @Override
-        public DoubleTag load(DataInput input) throws IOException {
-            return DoubleTag.valueOf(input.readDouble());
+        public IntTag load(DataInput input) throws IOException {
+            return IntTag.valueOf(input.readInt());
         }
 
         @Override
         public void skip(DataInput input) throws IOException {
-            input.readDouble(); // fastest way to skip it is to read but not assign
+            input.readInt(); // fastest way to skip it is to read but not assign
         }
 
         @Override
@@ -25,24 +25,24 @@ public class DoubleTag implements Tag
 
         @Override
         public String getName() {
-            return "Double";
+            return "Int";
         }
 
         @Override
         public String getPrettyName() {
-            return "TAG_Double";
+            return "TAG_Int";
         }
         
     };
 
     @Override
     public void write(DataOutput output) throws IOException {
-        output.writeDouble(value);
+        output.writeFloat(value);
     }
 
     @Override
     public int getId() {
-        return TAG_DOUBLE;
+        return TAG_INT;
     }
 
     @Override
@@ -52,7 +52,7 @@ public class DoubleTag implements Tag
 
     @Override
     public Tag copy() {
-        return new DoubleTag(value);
+        return new IntTag(value);
     }
 
     @Override
@@ -60,8 +60,8 @@ public class DoubleTag implements Tag
         return String.valueOf(value);
     }
 
-    private double value;
-    private DoubleTag(double value)
+    private int value;
+    private IntTag(int value)
     {
         this.value=value;
     }
@@ -72,9 +72,9 @@ public class DoubleTag implements Tag
         return String.valueOf(value);
     }
 
-    public static DoubleTag valueOf(double val)
+    public static IntTag valueOf(int val)
     {
-        return new DoubleTag(val);
+        return new IntTag(val);
     }
 
     @Override
@@ -94,8 +94,7 @@ public class DoubleTag implements Tag
 
     @Override
     public Integer asInt() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'asInt'");
+        return value;
     }
 
     @Override
@@ -112,7 +111,8 @@ public class DoubleTag implements Tag
 
     @Override
     public Double asDouble() {
-        return value;
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'asDouble'");
     }
 
     @Override
@@ -132,7 +132,6 @@ public class DoubleTag implements Tag
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'asLongArray'");
     }
-
     
     public Tag parent;
     @Override

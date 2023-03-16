@@ -1,48 +1,61 @@
-package dev.zontreck.ariaslib.nbt;
+package dev.zontreck.ariaslib.nbt.old;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-public class EndTag implements Tag
+public class IntArrayTag implements Tag
 {
-    public static final EndTag INSTANCE = new EndTag();
-    public static final TagType<EndTag> TYPE = new TagType<EndTag>() {
+    public static final TagType<IntArrayTag> TYPE = new TagType<IntArrayTag>() {
 
         @Override
-        public EndTag load(DataInput input) throws IOException {
-            return EndTag.INSTANCE;
+        public IntArrayTag load(DataInput input) throws IOException {
+            List<Integer> lst = new ArrayList<>();
+            int count = input.readInt();
+            while(count>0)
+            {
+                lst.add(input.readInt());
+                count--;
+            }
+
+            return new IntArrayTag(toArray(lst));
         }
 
         @Override
         public void skip(DataInput input) throws IOException {
-        }
-
-        @Override
-        public String getName() {
-            return "End";
-        }
-
-        @Override
-        public String getPrettyName() {
-            return "TAG_End";
+            load(input);
         }
 
         @Override
         public boolean hasValue() {
-            return false;
+            return true;
+        }
+
+        @Override
+        public String getName() {
+            return "Int_Array";
+        }
+
+        @Override
+        public String getPrettyName() {
+            return "TAG_Int_Array";
         }
         
     };
 
     @Override
     public void write(DataOutput output) throws IOException {
-        // Nothing to write here! We are the end tag
+        output.writeInt(value.length);
+        for (int b : value) {
+            output.writeInt(b);
+        }
     }
 
     @Override
     public int getId() {
-        return Tag.TAG_END;
+        return TAG_INT_ARRAY;
     }
 
     @Override
@@ -52,30 +65,76 @@ public class EndTag implements Tag
 
     @Override
     public Tag copy() {
-        return this;
+        return new IntArrayTag(value);
+    }
+
+    @Override
+    public String toString()
+    {
+        return String.valueOf(value);
     }
 
     @Override
     public String getAsString(int indents) {
-        return "";
+        String indent = makeIndent(indents);
+        String indentInside = makeIndent(indents+1);
+
+        String ret = "\n"+indent  + "[\n";
+        for (int i = 0; i< value.length; i++)
+        {
+            int b = value[i];
+            ret += indentInside + String.valueOf(b);
+
+            if((i+1) != value.length)
+            {
+                ret += ", ";
+            }
+            ret += "\n";
+
+        }
+
+        ret += indent+"]";
+        return ret;
     }
 
-    public EndTag valueOf(Object input) {
-        return INSTANCE;
+    private IntArrayTag(int[] value)
+    {
+        this.value=value;
     }
+    private static int[] toArray(List<Integer> entries)
+    {
+        int[] ret = new int[entries.size()];
+        int cur=0;
+        for(int b : entries)
+        {
+            ret[cur] = b;
+            cur++;
+        }
+
+        return ret;
+    }
+
+    public static IntArrayTag valueOf(int[] b)
+    {
+        return new IntArrayTag(b);
+    }
+    private int[] value;
 
     @Override
     public Byte asByte() {
+        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'asByte'");
     }
 
     @Override
     public Float asFloat() {
+        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'asFloat'");
     }
 
     @Override
     public String asString() {
+        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'asString'");
     }
 
@@ -111,8 +170,7 @@ public class EndTag implements Tag
 
     @Override
     public int[] asIntArray() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'asIntArray'");
+        return value;
     }
 
     @Override
@@ -120,6 +178,7 @@ public class EndTag implements Tag
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'asLongArray'");
     }
+
     
     public Tag parent;
     @Override

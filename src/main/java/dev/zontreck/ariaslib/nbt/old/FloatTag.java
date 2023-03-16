@@ -1,31 +1,21 @@
-package dev.zontreck.ariaslib.nbt;
+package dev.zontreck.ariaslib.nbt.old;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
-public class LongArrayTag implements Tag
+public class FloatTag implements Tag
 {
-    public static final TagType<LongArrayTag> TYPE = new TagType<LongArrayTag>() {
+    public static final TagType<FloatTag> TYPE = new TagType<FloatTag>() {
 
         @Override
-        public LongArrayTag load(DataInput input) throws IOException {
-            List<Long> lst = new ArrayList<>();
-            int count = input.readInt();
-            while(count>0)
-            {
-                lst.add(input.readLong());
-                count--;
-            }
-
-            return new LongArrayTag(toArray(lst));
+        public FloatTag load(DataInput input) throws IOException {
+            return FloatTag.valueOf(input.readFloat());
         }
 
         @Override
         public void skip(DataInput input) throws IOException {
-            load(input);
+            input.readFloat(); // fastest way to skip it is to read but not assign
         }
 
         @Override
@@ -35,27 +25,24 @@ public class LongArrayTag implements Tag
 
         @Override
         public String getName() {
-            return "Long_Array";
+            return "Float";
         }
 
         @Override
         public String getPrettyName() {
-            return "TAG_Long_Array";
+            return "TAG_Float";
         }
         
     };
 
     @Override
     public void write(DataOutput output) throws IOException {
-        output.writeInt(value.length);
-        for (long b : value) {
-            output.writeLong(b);
-        }
+        output.writeFloat(value);
     }
 
     @Override
     public int getId() {
-        return TAG_LONG_ARRAY;
+        return TAG_FLOAT;
     }
 
     @Override
@@ -65,7 +52,18 @@ public class LongArrayTag implements Tag
 
     @Override
     public Tag copy() {
-        return new LongArrayTag(value);
+        return new FloatTag(value);
+    }
+
+    @Override
+    public String getAsString(int indents) {
+        return String.valueOf(value)  + "f";
+    }
+
+    private Float value;
+    private FloatTag(Float value)
+    {
+        this.value=value;
     }
 
     @Override
@@ -74,69 +72,23 @@ public class LongArrayTag implements Tag
         return String.valueOf(value);
     }
 
-    @Override
-    public String getAsString(int indents) {
-
-        String indent = makeIndent(indents);
-        String indentInside = makeIndent(indents+1);
-
-        String ret = "\n" + indent + "[\n";
-        for (int i = 0; i< value.length; i++)
-        {
-            long b = value[i];
-            ret += String.valueOf(b);
-
-            if((i+1) != value.length)
-            {
-                ret += ", ";
-            }
-
-            ret += "\n";
-
-        }
-
-        ret +=indent+ "]";
-        return ret;
-    }
-
-    private LongArrayTag(long[] value)
+    public static FloatTag valueOf(Float val)
     {
-        this.value=value;
+        return new FloatTag(val);
     }
-    private static long[] toArray(List<Long> entries)
-    {
-        long[] ret = new long[entries.size()];
-        int cur=0;
-        for(long b : entries)
-        {
-            ret[cur] = b;
-            cur++;
-        }
-
-        return ret;
-    }
-
-    public static LongArrayTag valueOf(long[] b)
-    {
-        return new LongArrayTag(b);
-    }
-    private long[] value;
 
     @Override
     public Byte asByte() {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'asByte'");
     }
 
     @Override
     public Float asFloat() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'asFloat'");
+        return value;
     }
 
     @Override
     public String asString() {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'asString'");
     }
 
@@ -178,10 +130,10 @@ public class LongArrayTag implements Tag
 
     @Override
     public long[] asLongArray() {
-        return value;
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'asLongArray'");
     }
-
-
+    
     public Tag parent;
     @Override
     public void setParent(Tag parent) {
@@ -192,5 +144,4 @@ public class LongArrayTag implements Tag
     public Tag getParent() {
         return parent;
     }
-    
 }

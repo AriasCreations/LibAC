@@ -1,4 +1,4 @@
-package dev.zontreck.ariaslib.nbt;
+package dev.zontreck.ariaslib.nbt.old;
 
 public enum TagTypes {
     End(EndTag.TYPE),               // 0

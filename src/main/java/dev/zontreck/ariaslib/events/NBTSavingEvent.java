@@ -1,6 +1,6 @@
 package dev.zontreck.ariaslib.events;
 
-import dev.zontreck.ariaslib.nbt.CompoundTag;
+import dev.zontreck.ariaslib.nbt.old.CompoundTag;
 
 /**
  * This event is cancellable. Cancelling this event will result in the saving process being interrupted, and the tag to be saved, replaced right before saving completes

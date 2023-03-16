@@ -1,63 +1,48 @@
-package dev.zontreck.ariaslib.nbt;
+package dev.zontreck.ariaslib.nbt.old;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
-public class ByteArrayTag implements Tag
+public class EndTag implements Tag
 {
-    public static final TagType<ByteArrayTag> TYPE = new TagType<ByteArrayTag>() {
+    public static final EndTag INSTANCE = new EndTag();
+    public static final TagType<EndTag> TYPE = new TagType<EndTag>() {
 
         @Override
-        public ByteArrayTag load(DataInput input) throws IOException {
-            
-            List<Byte> lst = new ArrayList<>();
-            int count = input.readInt();
-            while(count>0)
-            {
-                lst.add(input.readByte());
-                count--;
-            }
-
-            return new ByteArrayTag(toArray(lst));
+        public EndTag load(DataInput input) throws IOException {
+            return EndTag.INSTANCE;
         }
 
         @Override
         public void skip(DataInput input) throws IOException {
-            load(input);
-        }
-
-        @Override
-        public boolean hasValue() {
-            return true;
         }
 
         @Override
         public String getName() {
-            return "Byte_Array";
+            return "End";
         }
 
         @Override
         public String getPrettyName() {
-            return "TAG_Byte_Array";
+            return "TAG_End";
+        }
+
+        @Override
+        public boolean hasValue() {
+            return false;
         }
         
     };
 
     @Override
     public void write(DataOutput output) throws IOException {
-        output.writeInt(value.length);
-        for (byte b : value) {
-            output.writeByte(b);
-        }
+        // Nothing to write here! We are the end tag
     }
 
     @Override
     public int getId() {
-        return TAG_BYTE_ARRAY;
+        return Tag.TAG_END;
     }
 
     @Override
@@ -67,79 +52,30 @@ public class ByteArrayTag implements Tag
 
     @Override
     public Tag copy() {
-        return new ByteArrayTag(value);
-    }
-
-    @Override
-    public String toString()
-    {
-        return String.valueOf(value);
+        return this;
     }
 
     @Override
     public String getAsString(int indents) {
-        
-        String indent = makeIndent(indents);
-        String indentInside = makeIndent(indents+1);
-
-        String ret = "\n" + indent + "[\n";
-
-        for (int i = 0; i< value.length; i++)
-        {
-            byte b = value[i];
-            ret += indentInside+String.valueOf(b);
-
-            if((i+1) != value.length)
-            {
-                ret += ", ";
-            }
-            ret+="\n";
-
-        }
-        
-
-        ret += indent+"]";
-        return ret;
+        return "";
     }
 
-    private ByteArrayTag(byte[] value)
-    {
-        this.value=value;
+    public EndTag valueOf(Object input) {
+        return INSTANCE;
     }
-    private static byte[] toArray(List<Byte> entries)
-    {
-        byte[] ret = new byte[entries.size()];
-        int cur=0;
-        for(byte b : entries)
-        {
-            ret[cur] = b;
-            cur++;
-        }
-
-        return ret;
-    }
-
-    public static ByteArrayTag valueOf(byte[] b)
-    {
-        return new ByteArrayTag(b);
-    }
-    private byte[] value;
 
     @Override
     public Byte asByte() {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'asByte'");
     }
 
     @Override
     public Float asFloat() {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'asFloat'");
     }
 
     @Override
     public String asString() {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'asString'");
     }
 
@@ -169,7 +105,8 @@ public class ByteArrayTag implements Tag
 
     @Override
     public byte[] asByteArray() {
-        return value;
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'asByteArray'");
     }
 
     @Override
@@ -183,7 +120,7 @@ public class ByteArrayTag implements Tag
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'asLongArray'");
     }
-
+    
     public Tag parent;
     @Override
     public void setParent(Tag parent) {
@@ -194,6 +131,4 @@ public class ByteArrayTag implements Tag
     public Tag getParent() {
         return parent;
     }
-
-    
 }

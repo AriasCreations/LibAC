@@ -1,31 +1,21 @@
-package dev.zontreck.ariaslib.nbt;
+package dev.zontreck.ariaslib.nbt.old;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
-public class IntArrayTag implements Tag
+public class ByteTag implements Tag
 {
-    public static final TagType<IntArrayTag> TYPE = new TagType<IntArrayTag>() {
+    public static final TagType<ByteTag> TYPE = new TagType<ByteTag>() {
 
         @Override
-        public IntArrayTag load(DataInput input) throws IOException {
-            List<Integer> lst = new ArrayList<>();
-            int count = input.readInt();
-            while(count>0)
-            {
-                lst.add(input.readInt());
-                count--;
-            }
-
-            return new IntArrayTag(toArray(lst));
+        public ByteTag load(DataInput input) throws IOException {
+            return ByteTag.valueOf(input.readByte());
         }
 
         @Override
         public void skip(DataInput input) throws IOException {
-            load(input);
+            input.skipBytes(1);
         }
 
         @Override
@@ -35,27 +25,24 @@ public class IntArrayTag implements Tag
 
         @Override
         public String getName() {
-            return "Int_Array";
+            return "Byte";
         }
 
         @Override
         public String getPrettyName() {
-            return "TAG_Int_Array";
+            return "TAG_Byte";
         }
         
     };
 
     @Override
     public void write(DataOutput output) throws IOException {
-        output.writeInt(value.length);
-        for (int b : value) {
-            output.writeInt(b);
-        }
+        output.writeByte(value);
     }
 
     @Override
     public int getId() {
-        return TAG_INT_ARRAY;
+        return TAG_BYTE;
     }
 
     @Override
@@ -65,7 +52,7 @@ public class IntArrayTag implements Tag
 
     @Override
     public Tag copy() {
-        return new IntArrayTag(value);
+        return new ByteTag(value);
     }
 
     @Override
@@ -76,54 +63,25 @@ public class IntArrayTag implements Tag
 
     @Override
     public String getAsString(int indents) {
-        String indent = makeIndent(indents);
-        String indentInside = makeIndent(indents+1);
 
-        String ret = "\n"+indent  + "[\n";
-        for (int i = 0; i< value.length; i++)
-        {
-            int b = value[i];
-            ret += indentInside + String.valueOf(b);
-
-            if((i+1) != value.length)
-            {
-                ret += ", ";
-            }
-            ret += "\n";
-
-        }
-
-        ret += indent+"]";
-        return ret;
+        String val = String.valueOf(value);
+        val+="b";
+        return val;
     }
 
-    private IntArrayTag(int[] value)
+    private ByteTag(byte value)
     {
         this.value=value;
     }
-    private static int[] toArray(List<Integer> entries)
+    public static ByteTag valueOf(byte b)
     {
-        int[] ret = new int[entries.size()];
-        int cur=0;
-        for(int b : entries)
-        {
-            ret[cur] = b;
-            cur++;
-        }
-
-        return ret;
+        return new ByteTag(b);
     }
-
-    public static IntArrayTag valueOf(int[] b)
-    {
-        return new IntArrayTag(b);
-    }
-    private int[] value;
+    private byte value;
 
     @Override
     public Byte asByte() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'asByte'");
+        return value;
     }
 
     @Override
@@ -170,7 +128,8 @@ public class IntArrayTag implements Tag
 
     @Override
     public int[] asIntArray() {
-        return value;
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'asIntArray'");
     }
 
     @Override
@@ -179,7 +138,6 @@ public class IntArrayTag implements Tag
         throw new UnsupportedOperationException("Unimplemented method 'asLongArray'");
     }
 
-    
     public Tag parent;
     @Override
     public void setParent(Tag parent) {
@@ -190,4 +148,5 @@ public class IntArrayTag implements Tag
     public Tag getParent() {
         return parent;
     }
+    
 }

@@ -1,21 +1,21 @@
-package dev.zontreck.ariaslib.nbt;
+package dev.zontreck.ariaslib.nbt.old;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-public class IntTag implements Tag
+public class ShortTag implements Tag
 {
-    public static final TagType<IntTag> TYPE = new TagType<IntTag>() {
+    public static final TagType<ShortTag> TYPE = new TagType<ShortTag>() {
 
         @Override
-        public IntTag load(DataInput input) throws IOException {
-            return IntTag.valueOf(input.readInt());
+        public ShortTag load(DataInput input) throws IOException {
+            return ShortTag.valueOf(input.readShort());
         }
 
         @Override
         public void skip(DataInput input) throws IOException {
-            input.readInt(); // fastest way to skip it is to read but not assign
+            input.readShort(); // fastest way to skip it is to read but not assign
         }
 
         @Override
@@ -25,12 +25,12 @@ public class IntTag implements Tag
 
         @Override
         public String getName() {
-            return "Int";
+            return "Short";
         }
 
         @Override
         public String getPrettyName() {
-            return "TAG_Int";
+            return "TAG_Short";
         }
         
     };
@@ -42,7 +42,7 @@ public class IntTag implements Tag
 
     @Override
     public int getId() {
-        return TAG_INT;
+        return TAG_SHORT;
     }
 
     @Override
@@ -52,7 +52,7 @@ public class IntTag implements Tag
 
     @Override
     public Tag copy() {
-        return new IntTag(value);
+        return new ShortTag(value);
     }
 
     @Override
@@ -60,8 +60,8 @@ public class IntTag implements Tag
         return String.valueOf(value);
     }
 
-    private int value;
-    private IntTag(int value)
+    private short value;
+    private ShortTag(short value)
     {
         this.value=value;
     }
@@ -72,9 +72,9 @@ public class IntTag implements Tag
         return String.valueOf(value);
     }
 
-    public static IntTag valueOf(int val)
+    public static ShortTag valueOf(short val)
     {
-        return new IntTag(val);
+        return new ShortTag(val);
     }
 
     @Override
@@ -94,13 +94,13 @@ public class IntTag implements Tag
 
     @Override
     public Integer asInt() {
-        return value;
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'asInt'");
     }
 
     @Override
     public Short asShort() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'asShort'");
+        return value;
     }
 
     @Override
@@ -132,6 +132,7 @@ public class IntTag implements Tag
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'asLongArray'");
     }
+
     
     public Tag parent;
     @Override

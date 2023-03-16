@@ -1,47 +1,48 @@
-package dev.zontreck.ariaslib.nbt;
+package dev.zontreck.ariaslib.nbt.old;
 
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-public class StringTag implements Tag{
-    
-    public static final TagType<StringTag> TYPE = new TagType<StringTag>() {
+public class DoubleTag implements Tag
+{
+    public static final TagType<DoubleTag> TYPE = new TagType<DoubleTag>() {
+
         @Override
-        public StringTag load(DataInput input) throws IOException {
-            return StringTag.valueOf(input.readUTF());
+        public DoubleTag load(DataInput input) throws IOException {
+            return DoubleTag.valueOf(input.readDouble());
         }
 
         @Override
         public void skip(DataInput input) throws IOException {
-            input.readUTF();
-        }
-
-        @Override
-        public String getName() {
-            return "String";
-        }
-
-        @Override
-        public String getPrettyName() {
-            return "TAG_String";
+            input.readDouble(); // fastest way to skip it is to read but not assign
         }
 
         @Override
         public boolean hasValue() {
             return true;
         }
+
+        @Override
+        public String getName() {
+            return "Double";
+        }
+
+        @Override
+        public String getPrettyName() {
+            return "TAG_Double";
+        }
         
     };
 
     @Override
     public void write(DataOutput output) throws IOException {
-        output.writeUTF(toString());
+        output.writeDouble(value);
     }
 
     @Override
     public int getId() {
-        return TAG_STRING;
+        return TAG_DOUBLE;
     }
 
     @Override
@@ -51,32 +52,30 @@ public class StringTag implements Tag{
 
     @Override
     public Tag copy() {
-        return new StringTag(value);
+        return new DoubleTag(value);
     }
 
     @Override
     public String getAsString(int indents) {
-        return "\""+value+"\"";
+        return String.valueOf(value);
+    }
+
+    private double value;
+    private DoubleTag(double value)
+    {
+        this.value=value;
     }
 
     @Override
     public String toString()
     {
-        return value;
+        return String.valueOf(value);
     }
 
-    public static StringTag valueOf(String input) {
-        if(input instanceof String)
-        {
-            return new StringTag(input);
-        } else return null;
-    }
-
-    private StringTag(String input)
+    public static DoubleTag valueOf(double val)
     {
-        this.value=input;
+        return new DoubleTag(val);
     }
-    private String value;
 
     @Override
     public Byte asByte() {
@@ -90,7 +89,7 @@ public class StringTag implements Tag{
 
     @Override
     public String asString() {
-        return value;
+        throw new UnsupportedOperationException("Unimplemented method 'asString'");
     }
 
     @Override
@@ -113,8 +112,7 @@ public class StringTag implements Tag{
 
     @Override
     public Double asDouble() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'asDouble'");
+        return value;
     }
 
     @Override
@@ -134,6 +132,7 @@ public class StringTag implements Tag{
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'asLongArray'");
     }
+
     
     public Tag parent;
     @Override

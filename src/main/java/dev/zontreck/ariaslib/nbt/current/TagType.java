@@ -1,9 +1,12 @@
-package dev.zontreck.ariaslib.nbt;
+package dev.zontreck.ariaslib.nbt.current;
+
+import dev.zontreck.ariaslib.nbt.old.EndTag;
+import dev.zontreck.ariaslib.nbt.old.Tag;
 
 import java.io.DataInput;
 import java.io.IOException;
 
-public interface TagType <T extends Tag>
+public interface TagType<T extends Tag>
 {
     T load(DataInput input) throws IOException;
 

@@ -1,4 +1,4 @@
-package dev.zontreck.ariaslib.nbt;
+package dev.zontreck.ariaslib.nbt.old;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
