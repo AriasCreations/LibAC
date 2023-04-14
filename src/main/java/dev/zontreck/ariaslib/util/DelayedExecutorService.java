@@ -60,6 +60,21 @@ public class DelayedExecutorService {
         //EXECUTORS.add(exe);
     }
 
+    public void scheduleRepeating(final Runnable run, int seconds)
+    {
+        if(!Terminal.isRunning()) return;
+
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                run.run();
+                scheduleRepeating(run, seconds);
+            }
+        };
+
+        repeater.schedule(task, seconds*1000L);
+    }
+
     private static void stopRepeatingThread()
     {
         repeater.cancel();
