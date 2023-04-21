@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import dev.zontreck.ariaslib.terminal.Terminal;
 
 
 public class DelayedExecutorService {
+
+    private static final AtomicBoolean RUN = new AtomicBoolean(true);
     private static int COUNT = 0;
     private static final DelayedExecutorService inst;
     private static final Timer repeater;
@@ -25,6 +28,24 @@ public class DelayedExecutorService {
         }, 1000L, 1000L);
     }
     private DelayedExecutorService(){}
+
+    /**
+     * Stops accepting new tasks, and current ones will abort
+     */
+    public static void stop()
+    {
+        RUN.set(false);
+    }
+
+    /**
+     * Resume accepting new tasks.
+     *
+     * NOTE: The task system is set to run by default. This call is only needed if DelayedExecutorService#stop was used previously
+     */
+    public static void start()
+    {
+        RUN.set(true);
+    }
 
     public static DelayedExecutorService getInstance()
     {
@@ -60,9 +81,14 @@ public class DelayedExecutorService {
         //EXECUTORS.add(exe);
     }
 
+    public static boolean isRunning()
+    {
+        return RUN.get();
+    }
+
     public void scheduleRepeating(final Runnable run, int seconds)
     {
-        if(!Terminal.isRunning()) return;
+        if(!isRunning()) return;
 
         TimerTask task = new TimerTask() {
             @Override
@@ -82,7 +108,7 @@ public class DelayedExecutorService {
 
     public void onTick()
     {
-        if(!Terminal.isRunning())
+        if(!isRunning())
         {
             DelayedExecutorService.stopRepeatingThread();
         }
