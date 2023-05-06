@@ -13,7 +13,7 @@ public class Progress
 	{
 		if(tickNum.get()>=TICKS.length()) tickNum.set(0);
 
-		return "[ " + TICKS.substring(tickNum.getAndIncrement(), tickNum.get()) + " ]";
+		return "[" + TICKS.substring(tickNum.getAndIncrement(), tickNum.get()) + "]";
 	}
 
 	public Progress(int maximum)
@@ -34,5 +34,23 @@ public class Progress
 	public static int getPercentOf(int current, int max)
 	{
 		return (current*100/max);
+	}
+
+	public void increment(){
+		current++;
+		sanity();
+	}
+	private void sanity(){
+		if(current > maximum) current = maximum;
+		if(current < 0)current = 0;
+	}
+	public void decrement(){
+		current--;
+		sanity();
+	}
+
+	public void setCurrent(int cur)
+	{
+		current=cur;
 	}
 }
