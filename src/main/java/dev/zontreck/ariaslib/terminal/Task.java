@@ -37,6 +37,14 @@ public abstract class Task implements Runnable
 			ConsolePrompt.console.printf("\r"+TASK_NAME+"\t\t["+token.status+"]\n");
 		}
 	}
+	public void setSuccess()
+	{
+		token.completed(CHECK);
+	}
+	public void setFail()
+	{
+		token.completed(FAIL);
+	}
 	public class SpinnerTask implements Runnable
 	{
 		public final TaskCompletionToken token;
