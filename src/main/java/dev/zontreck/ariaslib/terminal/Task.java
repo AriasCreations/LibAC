@@ -34,7 +34,7 @@ public abstract class Task implements Runnable
 	{
 		if(token.get())
 		{
-			ConsolePrompt.console.printf("\r"+TASK_NAME+"\t\t["+token.status+"]\n");
+			System.out.printf("\r"+TASK_NAME+"\t\t["+token.status+"]\n");
 		}
 	}
 	public void setSuccess()
@@ -61,7 +61,8 @@ public abstract class Task implements Runnable
 			{
 				try {
 					Thread.sleep(1000L);
-					ConsolePrompt.console.printf("\r"+TASK_NAME+"\t\t"+spinner.getSpinnerTick());
+
+					System.out.printf("\r"+TASK_NAME+"\t\t"+spinner.getSpinnerTick());
 				}catch(Exception e)
 				{
 					e.printStackTrace();

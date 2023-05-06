@@ -197,7 +197,7 @@ public class Entry<K>
         Entry work = new Entry<>();
         work.type = et;
         work.name = new String(nm);
-        System.out.println("Read start: " + work.name + " [ " + work.type.toString() + " ]");
+        //System.out.println("Read start: " + work.name + " [ " + work.type.toString() + " ]");
 
         switch(et)
         {
@@ -318,7 +318,7 @@ public class Entry<K>
             }
         }
 
-        System.out.println("Read finished: " + work.name + " [ " + work.type.toString() + " ]");
+        //System.out.println("Read finished: " + work.name + " [ " + work.type.toString() + " ]");
 
         return work;
     }
