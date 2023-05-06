@@ -65,7 +65,7 @@ public class DelayedExecutorService {
 
     public void schedule(final Runnable run, int seconds)
     {
-        if(!Terminal.isRunning()){
+        if(!isRunning()){
             return;
         }
         //long unix = Instant.now().getEpochSecond()+ (seconds);
