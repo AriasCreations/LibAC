@@ -40,7 +40,7 @@ public abstract class Task implements Runnable
 	{
 		DelayedExecutorService.scheduleTask(this, 1);
 		if(!isSilent)
-			DelayedExecutorService.scheduleTask(new SpinnerTask(token), 1);
+			DelayedExecutorService.scheduleTask(new SpinnerTask(token,this), 1);
 	}
 
 	public void stopTask()
@@ -58,25 +58,28 @@ public abstract class Task implements Runnable
 	{
 		token.completed(FAIL);
 	}
-	public class SpinnerTask implements Runnable
+	public class SpinnerTask extends Task
 	{
+		public final Task task;
 		public final TaskCompletionToken token;
 		private final Progress spinner = new Progress(100);
-		public SpinnerTask (TaskCompletionToken token)
+		public SpinnerTask (TaskCompletionToken token, Task parent)
 		{
+			super("spinner",true);
 			this.token=token;
+			this.task=parent;
 		}
 
 		@Override
 		public void run()
 		{
-			while(!token.get())
+			while(!task.isComplete())
 			{
 				try {
 					Thread.sleep(1000L);
 
 					if(!isSilent)
-						System.out.printf("\r"+TASK_NAME+"\t\t"+spinner.getSpinnerTick());
+						System.out.printf("\r"+task.TASK_NAME+"\t\t"+spinner.getSpinnerTick());
 				}catch(Exception e)
 				{
 					e.printStackTrace();

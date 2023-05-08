@@ -5,10 +5,15 @@ import dev.zontreck.ariaslib.util.DelayedExecutorService;
 
 import java.util.*;
 
-public class TaskBus implements Runnable
+public class TaskBus extends Task
 {
 	public static List<Task> tasks = new ArrayList<>();
 	public static Task current = null;
+
+	public TaskBus()
+	{
+		super("TaskBus",true);
+	}
 
 	@Override
 	public void run()
