@@ -27,7 +27,7 @@ public class DelayedExecutorService {
             public void run() {
                 DelayedExecutorService.getInstance().onTick();
             }
-        }, 1L, 1L, TimeUnit.SECONDS);
+        }, 250L, 250L, TimeUnit.MILLISECONDS);
     }
     private DelayedExecutorService(){}
 
@@ -99,6 +99,11 @@ public class DelayedExecutorService {
         //EXECUTORS.add(new DelayedExecution(run, unix));
     }
 
+    public static void instantExec(final Task run)
+    {
+        repeater.execute(run);
+    }
+
     public static boolean isRunning()
     {
         return RUN.get();
@@ -122,7 +127,6 @@ public class DelayedExecutorService {
 
     private static void stopRepeatingThread()
     {
-        repeater.shutdown();
         repeater.shutdownNow();
     }
 
