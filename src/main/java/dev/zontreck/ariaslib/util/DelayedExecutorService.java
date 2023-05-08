@@ -122,6 +122,7 @@ public class DelayedExecutorService {
     private static void stopRepeatingThread()
     {
         repeater.shutdown();
+        repeater.shutdownNow();
     }
 
     public void onTick()
