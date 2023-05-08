@@ -12,7 +12,6 @@ plugins {
     id 'maven-publish'
 }
 
-version = "1.2.${determinePatchVersion()}"
 group = "dev.zontreck"
 archivesBaseName = "LibAC"
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
@@ -31,7 +30,8 @@ def determinePatchVersion = {
     }
     return tagInfo.split("-")[1]
 }
-
+version = determinePatchVersion()
+version = "${apiVer}.${version}"
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
