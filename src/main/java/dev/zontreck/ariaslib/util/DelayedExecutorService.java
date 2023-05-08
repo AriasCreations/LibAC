@@ -2,6 +2,7 @@ package dev.zontreck.ariaslib.util;
 
 import java.time.Instant;
 import java.util.*;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -21,12 +22,12 @@ public class DelayedExecutorService {
         inst=new DelayedExecutorService();
         repeater = new ScheduledThreadPoolExecutor(20);
 
-        repeater.schedule(new Runnable() {
+        repeater.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
                 DelayedExecutorService.getInstance().onTick();
             }
-        }, 1L, TimeUnit.SECONDS);
+        }, 1L, 1L, TimeUnit.SECONDS);
     }
     private DelayedExecutorService(){}
 
