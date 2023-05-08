@@ -12,10 +12,25 @@ plugins {
     id 'maven-publish'
 }
 
-version = "1.1.13"
+version = "1.2.${determinePatchVersion()}"
 group = "dev.zontreck"
 archivesBaseName = "LibAC"
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+def determinePatchVersion = {
+    // get the name of the last tag
+    def tagInfo = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'describe', '--tags'
+        standardOutput = tagInfo
+    }
+    tagInfo = tagInfo.toString()
+
+    if (!tagInfo.contains('-')) {
+        return 0
+    }
+    return tagInfo.split("-")[1]
+}
 
 repositories {
     // Use Maven Central for resolving dependencies.
