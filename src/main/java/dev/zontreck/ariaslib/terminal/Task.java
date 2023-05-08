@@ -4,8 +4,9 @@ import dev.zontreck.ariaslib.util.DelayedExecutorService;
 import dev.zontreck.ariaslib.util.Progress;
 
 import java.io.Console;
+import java.util.TimerTask;
 
-public abstract class Task implements Runnable
+public abstract class Task extends TimerTask implements Runnable
 {
 	public final String TASK_NAME;
 	private TaskCompletionToken token = new TaskCompletionToken();
