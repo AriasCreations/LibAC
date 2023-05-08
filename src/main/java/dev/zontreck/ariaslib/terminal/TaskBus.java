@@ -22,14 +22,14 @@ public class TaskBus extends Task
 
 			if(TaskBus.current == null)
 			{
-				current = tasks.get(0);
-
-				current.startTask();
+				TaskBus.current = tasks.get(0);
+				tasks.remove(0);
+				TaskBus.current.startTask();
 			}else {
-				if(current.isComplete())
+				if(TaskBus.current.isComplete())
 				{
-					current.stopTask();
-					current=null;
+					TaskBus.current.stopTask();
+					TaskBus.current=null;
 				}
 			}
 			// Don't care about a empty stack exception. We'll just queue this task check back up
