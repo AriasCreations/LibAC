@@ -6,11 +6,16 @@ import dev.zontreck.ariaslib.events.CommandEvent;
 import dev.zontreck.ariaslib.events.EventBus;
 import dev.zontreck.ariaslib.util.DelayedExecutorService;
 
-public class ConsolePrompt implements Runnable
+public class ConsolePrompt extends Task
 {
     public static final Console console = System.console();
     
-    
+    public ConsolePrompt()
+    {
+        super("ConsolePrompt",true);
+    }
+
+
     @Override
     public void run()
     {
