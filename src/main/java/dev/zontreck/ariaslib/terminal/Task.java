@@ -13,10 +13,22 @@ public abstract class Task implements Runnable
 	public static final String CHECK = "✓";
 	public static final String FAIL = "X";
 	// Else use the progress spinner from the Progress class
+	private boolean isSilent=false;
 
 	public Task(String name)
 	{
 		TASK_NAME=name;
+	}
+
+	/**
+	 * This constructor is meant to be used to create silent tasks that do not output to the console. (Example usage: DelayedExecutionService)
+	 * @param name Task name
+	 * @param silent Whether to print to the terminal
+	 */
+	public Task(String name, boolean silent)
+	{
+		this(name);
+		isSilent=silent;
 	}
 
 
@@ -26,13 +38,14 @@ public abstract class Task implements Runnable
 
 	public void startTask()
 	{
-		DelayedExecutorService.getInstance().schedule(this, 1);
-		DelayedExecutorService.getInstance().schedule(new SpinnerTask(token), 1);
+		DelayedExecutorService.scheduleTask(this, 1);
+		if(!isSilent)
+			DelayedExecutorService.scheduleTask(new SpinnerTask(token), 1);
 	}
 
 	public void stopTask()
 	{
-		if(token.get())
+		if(token.get() && !isSilent)
 		{
 			System.out.printf("\r"+TASK_NAME+"\t\t["+token.status+"]\n");
 		}
@@ -62,7 +75,8 @@ public abstract class Task implements Runnable
 				try {
 					Thread.sleep(1000L);
 
-					System.out.printf("\r"+TASK_NAME+"\t\t"+spinner.getSpinnerTick());
+					if(!isSilent)
+						System.out.printf("\r"+TASK_NAME+"\t\t"+spinner.getSpinnerTick());
 				}catch(Exception e)
 				{
 					e.printStackTrace();

@@ -1,11 +1,10 @@
 package dev.zontreck.ariaslib.util;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.time.Instant;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import dev.zontreck.ariaslib.terminal.Task;
 import dev.zontreck.ariaslib.terminal.Terminal;
 
 
@@ -28,6 +27,20 @@ public class DelayedExecutorService {
         }, 1000L, 1000L);
     }
     private DelayedExecutorService(){}
+
+    /**
+     * This function is designed to set back up the executor if it was previously stopped and restarted.
+     */
+    public static void setup()
+    {
+        stopRepeatingThread();
+        repeater.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                DelayedExecutorService.getInstance().onTick();
+            }
+        }, 1000L, 1000L);
+    }
 
     /**
      * Stops accepting new tasks, and current ones will abort
@@ -53,32 +66,32 @@ public class DelayedExecutorService {
     }
     public class DelayedExecution
     {
-        public DelayedExecution(Runnable run, long unix) {
+        public DelayedExecution(Task run, long unix) {
             scheduled=run;
             unix_time=unix;
         }
-        public Runnable scheduled;
+        public Task scheduled;
         public long unix_time;
     }
 
     public List<DelayedExecution> EXECUTORS = new ArrayList<>();
 
-    public void schedule(final Runnable run, int seconds)
+    public static void scheduleTask(final Task run, int seconds)
+    {
+        DelayedExecutorService.getInstance().schedule(run,seconds);
+    }
+    public static void scheduleRepeatingTask(final Task run, int seconds)
+    {
+        DelayedExecutorService.getInstance().scheduleRepeating(run,seconds);
+    }
+
+    public void schedule(final Task run, int seconds)
     {
         if(!isRunning()){
             return;
         }
-        //long unix = Instant.now().getEpochSecond()+ (seconds);
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run()
-            {
-                run.run();
-            }
-        };
-        repeater.schedule(task, seconds*1000L);
-        //DelayedExecution exe = new DelayedExecution(run,unix);
-        //EXECUTORS.add(exe);
+        long unix = Instant.now().getEpochSecond()+ (seconds);
+        EXECUTORS.add(new DelayedExecution(run, unix));
     }
 
     public static boolean isRunning()
@@ -86,19 +99,19 @@ public class DelayedExecutorService {
         return RUN.get();
     }
 
-    public void scheduleRepeating(final Runnable run, int seconds)
+    public void scheduleRepeating(final Task run, int seconds)
     {
         if(!isRunning()) return;
 
-        TimerTask task = new TimerTask() {
+        long unix = Instant.now().getEpochSecond()+ (seconds);
+        Task repeater = new Task("Repeating:"+run.TASK_NAME, true) {
             @Override
             public void run() {
                 run.run();
                 scheduleRepeating(run, seconds);
             }
         };
-
-        repeater.schedule(task, seconds*1000L);
+        EXECUTORS.add(new DelayedExecution(repeater, unix));
     }
 
     private static void stopRepeatingThread()
@@ -112,7 +125,7 @@ public class DelayedExecutorService {
         {
             DelayedExecutorService.stopRepeatingThread();
         }
-        /*Iterator<DelayedExecution> it = EXECUTORS.iterator();
+        Iterator<DelayedExecution> it = EXECUTORS.iterator();
         while(it.hasNext())
         {
             DelayedExecution e = it.next();
@@ -123,7 +136,7 @@ public class DelayedExecutorService {
                 tx.setName("DelayedExecutorTask-"+String.valueOf(DelayedExecutorService.getNext()));
                 tx.start();
             }
-        }*/
+        }
     }
 
     public static int getNext()

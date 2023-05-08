@@ -1,13 +1,13 @@
 package dev.zontreck.ariaslib.terminal;
 
+import com.google.common.collect.Lists;
 import dev.zontreck.ariaslib.util.DelayedExecutorService;
 
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 public class TaskBus implements Runnable
 {
-	public static Stack<Task> tasks = new Stack<>();
+	public static List<Task> tasks = new ArrayList<>();
 	public static Task current = null;
 
 	@Override
@@ -17,7 +17,7 @@ public class TaskBus implements Runnable
 
 			if(TaskBus.current == null)
 			{
-				current = tasks.pop();
+				current = tasks.get(0);
 
 				current.startTask();
 			}else {
