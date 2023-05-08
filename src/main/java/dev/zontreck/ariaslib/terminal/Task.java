@@ -41,7 +41,7 @@ public abstract class Task extends TimerTask implements Runnable
 	{
 		DelayedExecutorService.scheduleTask(this, 1);
 		if(!isSilent)
-			DelayedExecutorService.scheduleTask(new SpinnerTask(token,this), 1);
+			DelayedExecutorService.instantExec(new SpinnerTask(token,this));
 	}
 
 	public void stopTask()
@@ -80,7 +80,7 @@ public abstract class Task extends TimerTask implements Runnable
 					Thread.sleep(500L);
 
 					if(!task.isSilent && !task.isComplete())
-						System.out.printf("\r"+task.TASK_NAME+"\t\t"+spinner.getSpinnerTick());
+						System.out.printf("\r"+task.TASK_NAME+"\t\t"+spinner.getSpinnerTick()+"\r");
 				}catch(Exception e)
 				{
 					e.printStackTrace();
