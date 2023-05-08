@@ -126,17 +126,20 @@ public class DelayedExecutorService {
             DelayedExecutorService.stopRepeatingThread();
         }
         Iterator<DelayedExecution> it = EXECUTORS.iterator();
-        while(it.hasNext())
-        {
-            DelayedExecution e = it.next();
-            if(e.unix_time < Instant.now().getEpochSecond())
+        try{
+
+            while(it.hasNext())
             {
-                it.remove();
-                Thread tx = new Thread(e.scheduled);
-                tx.setName("DelayedExecutorTask-"+String.valueOf(DelayedExecutorService.getNext()));
-                tx.start();
+                DelayedExecution e = it.next();
+                if(e.unix_time < Instant.now().getEpochSecond())
+                {
+                    it.remove();
+                    Thread tx = new Thread(e.scheduled);
+                    tx.setName("DelayedExecutorTask-"+String.valueOf(DelayedExecutorService.getNext()));
+                    tx.start();
+                }
             }
-        }
+        }catch(Exception e){}
     }
 
     public static int getNext()
