@@ -77,7 +77,7 @@ public abstract class Task extends TimerTask implements Runnable
 			while(!task.isComplete())
 			{
 				try {
-					Thread.sleep(500L);
+					Thread.sleep(50L);
 
 					if(!task.isSilent && !task.isComplete())
 						System.out.printf("\r"+task.TASK_NAME+"\t\t"+spinner.getSpinnerTick()+"\r");
