@@ -17,10 +17,10 @@ public class DelayedExecutorService {
     private static final AtomicBoolean RUN = new AtomicBoolean(true);
     private static AtomicInteger COUNT = new AtomicInteger(0);
     private static final DelayedExecutorService inst;
-    private static final ScheduledThreadPoolExecutor repeater;
+    private static ScheduledThreadPoolExecutor repeater;
     static{
         inst=new DelayedExecutorService();
-        repeater = new ScheduledThreadPoolExecutor(20);
+        repeater = new ScheduledThreadPoolExecutor(8);
 
         repeater.scheduleAtFixedRate(new Runnable() {
             @Override
@@ -37,7 +37,7 @@ public class DelayedExecutorService {
     public static void setup()
     {
         stopRepeatingThread();
-
+        repeater = new ScheduledThreadPoolExecutor(8);
         repeater.schedule(new Runnable() {
             @Override
             public void run() {
