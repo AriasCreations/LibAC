@@ -127,12 +127,7 @@ public class DelayedExecutorService {
 
     private static void stopRepeatingThread()
     {
-        repeater.shutdown();
-        try {
-            repeater.awaitTermination(1L, TimeUnit.SECONDS);
-        }catch(Exception e){
-            e.printStackTrace();
-        }
+        repeater.shutdownNow();
         repeater=null; // Dispose of so the threads get torn down and the program can stop successfully
     }
 
