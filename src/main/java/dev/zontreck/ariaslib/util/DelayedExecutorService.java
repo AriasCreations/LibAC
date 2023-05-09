@@ -128,6 +128,7 @@ public class DelayedExecutorService {
     private static void stopRepeatingThread()
     {
         repeater.shutdownNow();
+        repeater=null; // Dispose of so the threads get torn down and the program can stop successfully
     }
 
     public void onTick()
