@@ -32,6 +32,24 @@ public class DelayedExecutorService {
     private DelayedExecutorService(){}
 
     /**
+     * Sets the executor to use for this delayed executor service
+     * @param exec The executor to use
+     */
+    public static void setExecutor(ScheduledThreadPoolExecutor exec)
+    {
+        repeater = exec;
+    }
+
+    /**
+     * Requests the active executor instance
+     * @return The thread executor
+     */
+    public static ScheduledThreadPoolExecutor getExecutor()
+    {
+        return repeater;
+    }
+
+    /**
      * This function is designed to set back up the executor if it was previously stopped and restarted.
      */
     public static void setup()
