@@ -64,7 +64,6 @@ public class XmlRpcStreamReader {
 				if ( elementName.equals ( "param" ) ) {
 					nextTag ( );
 					require ( XMLStreamConstants.START_ELEMENT , null , "value" );
-					nextTag ( ); // Something to be deserialized!
 
 
 					Object value = deserializeValue ( );
