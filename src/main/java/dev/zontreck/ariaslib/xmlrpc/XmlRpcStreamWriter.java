@@ -83,7 +83,7 @@ public class XmlRpcStreamWriter {
 			writer.write ( "</string>" );
 			writer.write ( VALUE_END_TAG );
 		}
-		else if ( value instanceof Integer ) {
+		else if ( value instanceof Integer || value instanceof Long ) {
 			writer.write ( VALUE_START_TAG );
 			writer.write ( "<int>" );
 			writer.write ( value.toString ( ) );
