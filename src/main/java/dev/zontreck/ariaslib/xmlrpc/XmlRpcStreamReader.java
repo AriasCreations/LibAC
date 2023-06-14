@@ -17,11 +17,12 @@ public class XmlRpcStreamReader {
 		XMLInputFactory inputFactory = XMLInputFactory.newInstance ( );
 		xmlStreamReader = inputFactory.createXMLStreamReader ( inputStream );
 	}
-
+	private String CURRENT_TAG_NAME;
 	public boolean nextTag ( ) throws XMLStreamException {
 		while ( xmlStreamReader.hasNext ( ) ) {
 			int eventType = xmlStreamReader.next ( );
 			if ( eventType == XMLStreamConstants.START_ELEMENT || eventType == XMLStreamConstants.END_ELEMENT ) {
+				CURRENT_TAG_NAME = getLocalName ();
 				return true;
 			}
 		}
