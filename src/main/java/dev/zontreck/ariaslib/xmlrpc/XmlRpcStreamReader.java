@@ -5,7 +5,9 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class XmlRpcStreamReader {
@@ -53,24 +55,20 @@ public class XmlRpcStreamReader {
 	}
 
 	private Object[] deserializeParams ( ) throws XMLStreamException {
-		Object[] params = new Object[ 0 ];
-		boolean isValueElement = false;
-		while ( nextTag ( ) ) {
-			if ( xmlStreamReader.getLocalName ( ).equals ( "value" ) ) {
-				isValueElement = true;
-			}
-			else if ( xmlStreamReader.getLocalName ( ).equals ( "param" ) ) {
-				if ( isValueElement ) {
+		List<Object> paramsList = new ArrayList<> ( );
+
+		while ( xmlStreamReader.hasNext ( ) ) {
+			int event = xmlStreamReader.next ( );
+			if ( event == XMLStreamConstants.START_ELEMENT ) {
+				String elementName = xmlStreamReader.getLocalName ( );
+				if ( elementName.equals ( "param" ) ) {
 					Object value = deserializeValue ( );
-					Object[] newParams = new Object[ params.length + 1 ];
-					System.arraycopy ( params , 0 , newParams , 0 , params.length );
-					newParams[ params.length ] = value;
-					params = newParams;
-					isValueElement = false;
+					paramsList.add ( value );
 				}
 			}
 		}
-		return params;
+
+		return paramsList.toArray ( );
 	}
 
 	public Object readMethodResponseResult ( ) throws XMLStreamException {
@@ -187,12 +185,12 @@ public class XmlRpcStreamReader {
 		return struct;
 	}
 
-	public static String skipXmlHeader(String xml) {
-		int startIndex = xml.indexOf("<?xml");
-		if (startIndex >= 0) {
-			int endIndex = xml.indexOf("?>", startIndex);
-			if (endIndex >= 0) {
-				return xml.substring(endIndex + 2);
+	public static String skipXmlHeader ( String xml ) {
+		int startIndex = xml.indexOf ( "<?xml" );
+		if ( startIndex >= 0 ) {
+			int endIndex = xml.indexOf ( "?>" , startIndex );
+			if ( endIndex >= 0 ) {
+				return xml.substring ( endIndex + 2 );
 			}
 		}
 		return xml;
