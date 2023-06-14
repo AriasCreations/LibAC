@@ -83,6 +83,8 @@ public class XmlRpcStreamReader {
 
 	private Object deserializeValue ( ) throws XMLStreamException {
 		nextTag ( );
+		require( XMLStreamConstants.START_ELEMENT, null, "value");
+		nextTag (); // Something to be deserialized!
 		int eventType = xmlStreamReader.getEventType ( );
 		if ( eventType == XMLStreamConstants.CHARACTERS || eventType == XMLStreamConstants.CDATA ) {
 			return xmlStreamReader.getText ( );
