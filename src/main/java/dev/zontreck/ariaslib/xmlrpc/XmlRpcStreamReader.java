@@ -187,6 +187,9 @@ public class XmlRpcStreamReader {
 					Object value = deserializeValue ( );
 					struct.put ( name , value );
 				}
+			} else if(CURRENT_TAG_NAME.equals ( "struct" ) && xmlStreamReader.getEventType () == XMLStreamConstants.END_ELEMENT)
+			{
+				break;
 			}
 		}
 		return struct;
