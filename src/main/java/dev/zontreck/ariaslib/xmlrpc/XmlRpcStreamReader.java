@@ -182,7 +182,7 @@ public class XmlRpcStreamReader {
 			else if ( xmlStreamReader.getLocalName ( ).equals ( "name" ) ) {
 				name = getElementText ( );
 			}
-			else if ( xmlStreamReader.getLocalName ( ).equals ( "value" ) ) {
+			else if ( xmlStreamReader.getLocalName ( ).equals ( "value" ) && xmlStreamReader.getEventType () == XMLStreamConstants.START_ELEMENT) {
 				if ( name != null ) {
 					Object value = deserializeValue ( );
 					struct.put ( name , value );
