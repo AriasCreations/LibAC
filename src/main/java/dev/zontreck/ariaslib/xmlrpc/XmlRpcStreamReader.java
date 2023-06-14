@@ -62,8 +62,9 @@ public class XmlRpcStreamReader {
 			if ( event == XMLStreamConstants.START_ELEMENT ) {
 				String elementName = xmlStreamReader.getLocalName ( );
 				if ( elementName.equals ( "param" ) ) {
-					require( XMLStreamConstants.START_ELEMENT, null, "value");
-					nextTag (); // Something to be deserialized!
+					nextTag ( );
+					require ( XMLStreamConstants.START_ELEMENT , null , "value" );
+					nextTag ( ); // Something to be deserialized!
 
 
 					Object value = deserializeValue ( );
