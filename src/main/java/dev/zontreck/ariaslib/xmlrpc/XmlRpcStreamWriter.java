@@ -53,7 +53,6 @@ public class XmlRpcStreamWriter {
 				writer.write ( PARAM_END_TAG );
 			}
 		}
-
 		writer.write ( PARAMS_END_TAG );
 		writer.write ( METHOD_CALL_END_TAG );
 		writer.flush ( );
