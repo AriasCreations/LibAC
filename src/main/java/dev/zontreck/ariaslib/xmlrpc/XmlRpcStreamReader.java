@@ -17,12 +17,16 @@ public class XmlRpcStreamReader {
 		XMLInputFactory inputFactory = XMLInputFactory.newInstance ( );
 		xmlStreamReader = inputFactory.createXMLStreamReader ( inputStream );
 	}
+
 	private String CURRENT_TAG_NAME;
+	private int ELEM_TYPE;
+
 	public boolean nextTag ( ) throws XMLStreamException {
 		while ( xmlStreamReader.hasNext ( ) ) {
 			int eventType = xmlStreamReader.next ( );
 			if ( eventType == XMLStreamConstants.START_ELEMENT || eventType == XMLStreamConstants.END_ELEMENT ) {
-				CURRENT_TAG_NAME = getLocalName ();
+				CURRENT_TAG_NAME = getLocalName ( );
+				ELEM_TYPE = xmlStreamReader.getEventType ( );
 				return true;
 			}
 		}
@@ -137,39 +141,17 @@ public class XmlRpcStreamReader {
 	}
 
 	private Object[] deserializeArray ( ) throws XMLStreamException {
-		Object[] array = new Object[ 0 ];
-		boolean isValueElement = false;
+		List<Object> arr = new ArrayList<> ( );
 		while ( nextTag ( ) ) {
-			if ( xmlStreamReader.getLocalName ( ).equals ( "value" ) ) {
-				isValueElement = true;
+			if ( CURRENT_TAG_NAME.equals ( "data" ) && ELEM_TYPE == XMLStreamConstants.END_ELEMENT ) {
+				break;
 			}
-			else if ( xmlStreamReader.getLocalName ( ).equals ( "data" ) ) {
-				if ( isValueElement ) {
-					array = deserializeArrayData ( );
-				}
+			else if ( CURRENT_TAG_NAME.equals ( "value" ) && ELEM_TYPE == XMLStreamConstants.START_ELEMENT ) {
+				arr.add ( deserializeValue ( ) );
 			}
 		}
-		return array;
-	}
 
-	private Object[] deserializeArrayData ( ) throws XMLStreamException {
-		Object[] array = new Object[ 0 ];
-		boolean isArrayElement = false;
-		while ( nextTag ( ) ) {
-			if ( xmlStreamReader.getLocalName ( ).equals ( "array" ) ) {
-				isArrayElement = true;
-			}
-			else if ( xmlStreamReader.getLocalName ( ).equals ( "value" ) ) {
-				if ( isArrayElement ) {
-					Object value = deserializeValue ( );
-					Object[] newArray = new Object[ array.length + 1 ];
-					System.arraycopy ( array , 0 , newArray , 0 , array.length );
-					newArray[ array.length ] = value;
-					array = newArray;
-				}
-			}
-		}
-		return array;
+		return arr.toArray ( );
 	}
 
 	private Map<String, Object> deserializeStruct ( ) throws XMLStreamException {
@@ -182,13 +164,13 @@ public class XmlRpcStreamReader {
 			else if ( xmlStreamReader.getLocalName ( ).equals ( "name" ) ) {
 				name = getElementText ( );
 			}
-			else if ( xmlStreamReader.getLocalName ( ).equals ( "value" ) && xmlStreamReader.getEventType () == XMLStreamConstants.START_ELEMENT) {
+			else if ( xmlStreamReader.getLocalName ( ).equals ( "value" ) && xmlStreamReader.getEventType ( ) == XMLStreamConstants.START_ELEMENT ) {
 				if ( name != null ) {
 					Object value = deserializeValue ( );
 					struct.put ( name , value );
 				}
-			} else if(CURRENT_TAG_NAME.equals ( "struct" ) && xmlStreamReader.getEventType () == XMLStreamConstants.END_ELEMENT)
-			{
+			}
+			else if ( CURRENT_TAG_NAME.equals ( "struct" ) && xmlStreamReader.getEventType ( ) == XMLStreamConstants.END_ELEMENT ) {
 				break;
 			}
 		}
