@@ -117,9 +117,7 @@ public class XmlRpcStreamWriter {
 			writer.write ( DATA_START_TAG );
 			List<?> list = ( List<?> ) value;
 			for ( Object item : list ) {
-				writer.write ( VALUE_START_TAG );
 				writeValue ( item );
-				writer.write ( VALUE_END_TAG );
 			}
 			writer.write ( DATA_END_TAG );
 			writer.write ( ARRAY_END_TAG );
@@ -134,9 +132,7 @@ public class XmlRpcStreamWriter {
 				writer.write ( NAME_START_TAG );
 				writer.write ( escapeXml ( entry.getKey ( ).toString ( ) ) );
 				writer.write ( NAME_END_TAG );
-				writer.write ( VALUE_START_TAG );
 				writeValue ( entry.getValue ( ) );
-				writer.write ( VALUE_END_TAG );
 				writer.write ( MEMBER_END_TAG );
 			}
 			writer.write ( STRUCT_END_TAG );
