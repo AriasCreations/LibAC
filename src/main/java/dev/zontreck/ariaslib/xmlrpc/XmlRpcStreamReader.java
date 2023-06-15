@@ -115,6 +115,10 @@ public class XmlRpcStreamReader {
 					return deserializeStruct ( );
 				case "nil":
 					return null;
+				case "i4":
+					return deserializeByte ( );
+				case "i8":
+					return deserializeLong ( );
 				default:
 					throw new IllegalArgumentException ( "Unsupported element: " + localName );
 			}
@@ -130,6 +134,14 @@ public class XmlRpcStreamReader {
 
 	private int deserializeInt ( ) throws XMLStreamException {
 		return Integer.parseInt ( getElementText ( ) );
+	}
+
+	private byte deserializeByte ( ) throws XMLStreamException {
+		return Byte.parseByte ( getElementText ( ) );
+	}
+
+	private long deserializeLong ( ) throws XMLStreamException {
+		return Long.parseLong ( getElementText ( ) );
 	}
 
 	private double deserializeDouble ( ) throws XMLStreamException {

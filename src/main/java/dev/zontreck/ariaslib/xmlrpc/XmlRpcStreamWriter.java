@@ -83,10 +83,17 @@ public class XmlRpcStreamWriter {
 			writer.write ( "</string>" );
 			writer.write ( VALUE_END_TAG );
 		}
-		else if ( value instanceof Integer || value instanceof Long ) {
+		else if ( value instanceof Integer ) {
 			writer.write ( VALUE_START_TAG );
 			writer.write ( "<int>" );
 			writer.write ( value.toString ( ) );
+			writer.write ( "</int>" );
+			writer.write ( VALUE_END_TAG );
+		} else if(value instanceof Long)
+		{
+			writer.write ( VALUE_START_TAG );
+			writer.write ( "<int>" );
+			writer.write ( value.toString () );   // Save it as a int for now due to unclear handling
 			writer.write ( "</int>" );
 			writer.write ( VALUE_END_TAG );
 		}
@@ -133,6 +140,14 @@ public class XmlRpcStreamWriter {
 				writer.write ( MEMBER_END_TAG );
 			}
 			writer.write ( STRUCT_END_TAG );
+			writer.write ( VALUE_END_TAG );
+		}
+		else if(value instanceof Byte)
+		{
+			writer.write ( VALUE_START_TAG );
+			writer.write ( "<int>" );
+			writer.write ( value.toString () ); // Treat as a integer for now
+			writer.write ( "</int>" );
 			writer.write ( VALUE_END_TAG );
 		}
 		else {
