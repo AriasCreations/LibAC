@@ -3,7 +3,9 @@ package dev.zontreck.ariaslib.json;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class DynamicSerializer {
@@ -55,6 +57,11 @@ public class DynamicSerializer {
 			String fieldName = field.getName ( );
 
 			if ( ! ( fieldVal.getClass ( ).isAnnotationPresent ( DynSerial.class ) ) ) {
+				// Special handler for List and Map is needed right here.
+				if (fieldVal instanceof List || fieldVal instanceof Map) {
+					// Special handling for List and Map types
+					fieldVal = serializeCollectionOrMap(fieldVal);
+				}
 				ret.put ( fieldName , fieldVal );
 			}
 			else {
@@ -71,5 +78,37 @@ public class DynamicSerializer {
 
 
 	}
+
+	@SuppressWarnings ("unchecked")
+	private static Object serializeCollectionOrMap ( Object collectionOrMap ) throws InvocationTargetException, IllegalAccessException {
+		if ( collectionOrMap instanceof List ) {
+			List<Object> list = ( List<Object> ) collectionOrMap;
+			List<Object> serializedList = new ArrayList<> ( );
+			for ( Object item : list ) {
+				if ( item.getClass ( ).isAnnotationPresent ( DynSerial.class ) ) {
+					serializedList.add ( serialize ( item ) );
+				}
+				else {
+					serializedList.add ( item );
+				}
+			}
+			return serializedList;
+		}
+		else if ( collectionOrMap instanceof Map ) {
+			Map<String, Object> map = ( Map<String, Object> ) collectionOrMap;
+			Map<String, Object> serializedMap = new HashMap<> ( );
+			for ( Map.Entry<String, Object> entry : map.entrySet ( ) ) {
+				String key = entry.getKey ( );
+				Object value = entry.getValue ( );
+				if ( value.getClass ( ).isAnnotationPresent ( DynSerial.class ) ) {
+					value = serialize ( value );
+				}
+				serializedMap.put ( key , value );
+			}
+			return serializedMap;
+		}
+		return collectionOrMap;
+	}
+
 
 }
