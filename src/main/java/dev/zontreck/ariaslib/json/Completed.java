@@ -1,4 +1,4 @@
-package dev.zontreck.ariaslib.xml;
+package dev.zontreck.ariaslib.json;
 
 /**
  * Serialization or Deserialization has completed.

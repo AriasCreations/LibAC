@@ -1,4 +1,4 @@
-package dev.zontreck.ariaslib.xml;
+package dev.zontreck.ariaslib.json;
 
 import java.io.ByteArrayInputStream;
 import java.lang.reflect.Field;
@@ -18,8 +18,7 @@ public class DynamicDeserializer
 	 */
 	public static <T> T doDeserialize(Class<T> clazz, byte[] data) throws Exception {
 		ByteArrayInputStream BAIS = new ByteArrayInputStream ( data );
-		XmlDeserializer deserial = new XmlDeserializer ( BAIS );
-		return deserialize( ( Map<String, Object> ) deserial.readSettings () , clazz);
+		return deserialize( ( Map<String, Object> ) JsonObject.parseJSON ( BAIS ).getMap() , clazz);
 	}
 
 	private static <T> T deserialize(Map<String, Object> map, Class<T> clazz) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
@@ -32,7 +31,7 @@ public class DynamicDeserializer
 				Field field :
 				fields
 		) {
-			if(XmlStreamWriter.isSerializableType ( field.getType () ))
+			if( !( field.getType ().isAnnotationPresent ( DynSerial.class ) ))
 			{
 				field.set ( object, map.get ( field.getName () ) );
 			}else {
