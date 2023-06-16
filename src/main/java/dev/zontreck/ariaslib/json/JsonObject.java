@@ -77,6 +77,7 @@ public class JsonObject {
 	}
 
 	private String escape(String str) {
+		if(str == null)return "";
 		// Add necessary escape characters (e.g., double quotes, backslashes)
 		// You can implement this method based on your specific requirements.
 		// This is a simplified version for demonstration purposes.

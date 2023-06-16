@@ -48,8 +48,9 @@ public class DynamicSerializer {
 			field.setAccessible ( true );
 			if ( field.isAnnotationPresent ( IgnoreSerialization.class ) )
 				continue;
+
 			Object fieldVal = field.get ( inst );
-			if(fieldVal == null)continue;
+			if ( fieldVal == null ) continue;
 
 			String fieldName = field.getName ( );
 
