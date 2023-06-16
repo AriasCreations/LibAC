@@ -99,16 +99,16 @@ public class XmlRpcStreamWriter {
 		}
 		else if ( value instanceof Double ) {
 			writer.write ( VALUE_START_TAG );
-			writer.write ( "<double>" );
+			writer.write ( "<real>" );
 			writer.write ( value.toString ( ) );
-			writer.write ( "</double>" );
+			writer.write ( "</real>" );
 			writer.write ( VALUE_END_TAG );
 		}
 		else if ( value instanceof Boolean ) {
 			writer.write ( VALUE_START_TAG );
-			writer.write ( "<boolean>" );
+			writer.write ( "<string>" );
 			writer.write ( value.toString ( ) );
-			writer.write ( "</boolean>" );
+			writer.write ( "</string>" );
 			writer.write ( VALUE_END_TAG );
 		}
 		else if ( value instanceof List ) {
