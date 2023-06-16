@@ -45,6 +45,7 @@ public class DynamicSerializer {
 				Field field :
 				fields
 		) {
+			field.setAccessible ( true );
 			if ( field.isAnnotationPresent ( IgnoreSerialization.class ) )
 				continue;
 			Object fieldVal = field.get ( inst );

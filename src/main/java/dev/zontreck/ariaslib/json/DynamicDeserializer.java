@@ -31,6 +31,9 @@ public class DynamicDeserializer
 				Field field :
 				fields
 		) {
+			field.setAccessible ( true );
+
+
 			if( !( field.getType ().isAnnotationPresent ( DynSerial.class ) ))
 			{
 				field.set ( object, map.get ( field.getName () ) );

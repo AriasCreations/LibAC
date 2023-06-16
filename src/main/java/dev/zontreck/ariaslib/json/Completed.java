@@ -1,5 +1,8 @@
 package dev.zontreck.ariaslib.json;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
 /**
  * Serialization or Deserialization has completed.
  *
@@ -7,5 +10,6 @@ package dev.zontreck.ariaslib.json;
  *
  * Boolean: True for deserialization.
  */
+@Retention ( RetentionPolicy.RUNTIME )
 public @interface Completed {
 }
