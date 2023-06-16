@@ -103,6 +103,7 @@ public class XmlRpcStreamReader {
 			switch ( localName ) {
 				case "string":
 					return deserializeString ( );
+				case "i4":
 				case "int":
 					return deserializeInt ( );
 				case "double":
@@ -115,8 +116,6 @@ public class XmlRpcStreamReader {
 					return deserializeStruct ( );
 				case "nil":
 					return null;
-				case "i4":
-					return deserializeByte ( );
 				case "i8":
 					return deserializeLong ( );
 				default:

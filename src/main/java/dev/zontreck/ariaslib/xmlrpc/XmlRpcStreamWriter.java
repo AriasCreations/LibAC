@@ -85,23 +85,23 @@ public class XmlRpcStreamWriter {
 		}
 		else if ( value instanceof Integer ) {
 			writer.write ( VALUE_START_TAG );
-			writer.write ( "<int>" );
+			writer.write ( "<i4>" );
 			writer.write ( value.toString ( ) );
-			writer.write ( "</int>" );
+			writer.write ( "</i4>" );
 			writer.write ( VALUE_END_TAG );
 		} else if(value instanceof Long)
 		{
 			writer.write ( VALUE_START_TAG );
-			writer.write ( "<int>" );
+			writer.write ( "<i8>" );
 			writer.write ( value.toString () );   // Save it as a int for now due to unclear handling
-			writer.write ( "</int>" );
+			writer.write ( "</i8>" );
 			writer.write ( VALUE_END_TAG );
 		}
 		else if ( value instanceof Double ) {
 			writer.write ( VALUE_START_TAG );
-			writer.write ( "<real>" );
+			writer.write ( "<double>" );
 			writer.write ( value.toString ( ) );
-			writer.write ( "</real>" );
+			writer.write ( "</double>" );
 			writer.write ( VALUE_END_TAG );
 		}
 		else if ( value instanceof Boolean ) {
