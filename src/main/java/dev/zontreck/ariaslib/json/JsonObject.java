@@ -89,7 +89,10 @@ public class JsonObject {
 		} else if (value instanceof JsonObject js) {
 			return js.toJSONString();
 		} else if (value instanceof List) {
-			return toJSONList((List<Object>) value);
+			return toJSONList ( ( List<Object> ) value );
+		} else if(value instanceof Map<?,?> mp )
+		{
+			return new JsonObject ( (Map<String, Object> ) mp ).toJSONString ();
 		} else {
 			return value.toString();
 		}

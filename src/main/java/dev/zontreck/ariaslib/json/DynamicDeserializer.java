@@ -34,12 +34,17 @@ public class DynamicDeserializer
 			field.setAccessible ( true );
 
 
-			if( !( field.getType ().isAnnotationPresent ( DynSerial.class ) ))
-			{
-				field.set ( object, map.get ( field.getName () ) );
-			}else {
-				Object tmp = deserialize ( (Map<String, Object> ) map.get ( field.getName () ), field.getType ());
-				field.set ( object, tmp );
+			try{
+
+				if( !( field.getType ().isAnnotationPresent ( DynSerial.class ) ))
+				{
+					field.set ( object, map.get ( field.getName () ) );
+				}else {
+					Object tmp = deserialize ( (Map<String, Object> ) map.get ( field.getName () ), field.getType ());
+					field.set ( object, tmp );
+				}
+			}catch(Exception e){
+
 			}
 		}
 
