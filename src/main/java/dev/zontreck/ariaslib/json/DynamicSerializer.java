@@ -56,12 +56,15 @@ public class DynamicSerializer {
 
 			String fieldName = field.getName ( );
 
+			if (field.isAnnotationPresent ( ListOrMap.class )) {
+				// Special handling for List and Map types
+				ret.put(fieldName, serializeCollectionOrMap(fieldVal));
+				continue;
+			}
 			if ( ! ( fieldVal.getClass ( ).isAnnotationPresent ( DynSerial.class ) ) ) {
 				// Special handler for List and Map is needed right here.
-				if (fieldVal instanceof List || fieldVal instanceof Map) {
-					// Special handling for List and Map types
-					fieldVal = serializeCollectionOrMap(fieldVal);
-				}
+				if(fieldVal instanceof List || fieldVal instanceof Map) continue;
+
 				ret.put ( fieldName , fieldVal );
 			}
 			else {
@@ -81,8 +84,7 @@ public class DynamicSerializer {
 
 	@SuppressWarnings ("unchecked")
 	private static Object serializeCollectionOrMap ( Object collectionOrMap ) throws InvocationTargetException, IllegalAccessException {
-		if ( collectionOrMap instanceof List ) {
-			List<Object> list = ( List<Object> ) collectionOrMap;
+		if ( collectionOrMap instanceof List<?> list ) {
 			List<Object> serializedList = new ArrayList<> ( );
 			for ( Object item : list ) {
 				if ( item.getClass ( ).isAnnotationPresent ( DynSerial.class ) ) {
@@ -94,8 +96,8 @@ public class DynamicSerializer {
 			}
 			return serializedList;
 		}
-		else if ( collectionOrMap instanceof Map ) {
-			Map<String, Object> map = ( Map<String, Object> ) collectionOrMap;
+		else if ( collectionOrMap instanceof Map<?,?> mp ) {
+			Map<String,Object> map = (Map<String, Object> ) mp;
 			Map<String, Object> serializedMap = new HashMap<> ( );
 			for ( Map.Entry<String, Object> entry : map.entrySet ( ) ) {
 				String key = entry.getKey ( );
