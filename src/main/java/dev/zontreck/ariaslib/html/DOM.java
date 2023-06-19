@@ -32,6 +32,27 @@ public class DOM
 	}
 
 
+	public static HTMLElementBuilder beginBootstrapDOM(String pageTitle)
+	{
+		var builder = new HTMLElementBuilder ( "!doctype" );
+		var html = new HTMLElementBuilder ( "html" );
+		var head = new HTMLElementBuilder ( "head" );
+		var meta = new HTMLElementBuilder ( "meta" ).withAttribute ( "charset", "utf-8" );
+		var meta2 = new HTMLElementBuilder ( "meta" ).withAttribute ( "name", "viewport" ).withAttribute ( "content", "width=device-width, initial-scale=1" );
+		var linkBootstrap = new HTMLElementBuilder ( "link" ).withAttribute ( "href", "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" ).withAttribute ( "integrity", "sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" ).withAttribute ( "crossorigin", "anonymous" );
+		var title = new HTMLElementBuilder ( "title" ).withText ( pageTitle );
+
+
+		head.addChild ( meta ).addChild ( meta2 ).addChild ( linkBootstrap ).addChild ( title );
+		html.addChild ( head );
+
+		builder.addChild ( html );
+
+		return builder;
+
+	}
+
+
 	public static String closeHTML()
 	{
 		return "</body></html>";
