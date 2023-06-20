@@ -1,13 +1,12 @@
 package dev.zontreck.ariaslib.html;
 
-public class DOM
-{
+public class DOM {
 	/**
 	 * Generates a HTML Header that automatically includes dependencies
+	 *
 	 * @return HTML
 	 */
-	public static String getHTMLHeader(String pageTitle)
-	{
+	public static String getHTMLHeader ( String pageTitle ) {
 		return "<!doctype html>\n" +
 				"<html lang=\"en\">\n" +
 				"  <head>\n" +
@@ -19,7 +18,7 @@ public class DOM
 				"    \n" +
 				"    <link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css\" rel=\"stylesheet\" integrity=\"sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM\" crossorigin=\"anonymous\">\n\n" +
 				"\n" +
-				"    <title>"+pageTitle+"</title>\n" +
+				"    <title>" + pageTitle + "</title>\n" +
 				"  </head>\n" +
 				"  <body>\n" +
 				"\n" +
@@ -32,29 +31,30 @@ public class DOM
 	}
 
 
-	public static HTMLElementBuilder beginBootstrapDOM(String pageTitle)
-	{
-		var builder = new HTMLElementBuilder ( "!doctype" );
-		var html = new HTMLElementBuilder ( "html" );
-		var head = new HTMLElementBuilder ( "head" );
-		var meta = new HTMLElementBuilder ( "meta" ).withAttribute ( "charset", "utf-8" );
-		var meta2 = new HTMLElementBuilder ( "meta" ).withAttribute ( "name", "viewport" ).withAttribute ( "content", "width=device-width, initial-scale=1" );
-		var linkBootstrap = new HTMLElementBuilder ( "link" ).withAttribute ( "href", "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" ).withAttribute ( "integrity", "sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" ).withAttribute ( "crossorigin", "anonymous" );
-		var title = new HTMLElementBuilder ( "title" ).withText ( pageTitle );
+	public static HTMLElementBuilder beginBootstrapDOM ( String pageTitle ) {
+		var builder = new HTMLElementBuilder ( "!doctype" ).withText ( "html" );
 
+		var html = builder.getOrCreate ( "html" );
 
-		head.addChild ( meta ).addChild ( meta2 ).addChild ( linkBootstrap ).addChild ( title );
-		html.addChild ( head );
+		var head = html.getOrCreate ( "head" );
 
-		builder.addChild ( html );
+		head.addChild ( "meta" ).withAttribute ( "charset" , "utf-8" );
+
+		head.addChild ( "meta" ).withAttribute ( "name" , "viewport" ).withAttribute ( "content" , "width=device-width, initial-scale=1" );
+
+		head.getOrCreate ( "link" ).withAttribute ( "href" , "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" ).withAttribute ( "integrity" , "sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" ).withAttribute ( "crossorigin" , "anonymous" );
+
+		head.getOrCreate ( "title" ).withText ( pageTitle );
+
+		html.getOrCreate ( "body" ).addChild ( "script" ).withAttribute ( "src" , "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" ).withAttribute ( "integrity" , "sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" ).withAttribute ( "crossorigin" , "anonymous" );
+
 
 		return builder;
 
 	}
 
 
-	public static String closeHTML()
-	{
+	public static String closeHTML ( ) {
 		return "</body></html>";
 	}
 }

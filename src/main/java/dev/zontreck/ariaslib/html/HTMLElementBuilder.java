@@ -1,9 +1,7 @@
 package dev.zontreck.ariaslib.html;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 // Builder class for building HTML elements
 class HTMLElementBuilder {
@@ -11,13 +9,13 @@ class HTMLElementBuilder {
 	private String text;
 	private List<HTMLAttribute> attributes;
 	private boolean isEmptyElement;
-	private Map<String, HTMLElementBuilder> childElementBuilders;
+	private List<HTMLElementBuilder> childElementBuilders;
 
 	public HTMLElementBuilder ( String tagName ) {
 		this.tagName = tagName;
 		this.attributes = new ArrayList<> ( );
 		this.isEmptyElement = false;
-		this.childElementBuilders = new HashMap<> ( );
+		this.childElementBuilders = new ArrayList<> ( );
 	}
 
 	public HTMLElementBuilder withText ( String text ) {
@@ -42,24 +40,57 @@ class HTMLElementBuilder {
 		return this;
 	}
 
-	public HTMLElementBuilder getOrCreate ( String tagName ) {
-		HTMLElementBuilder childBuilder = childElementBuilders.get ( tagName );
+	public HTMLElementBuilder addChild ( HTMLElementBuilder childBuilder ) {
+		childElementBuilders.add ( childBuilder );
+		return this;
+	}
 
-		if ( childBuilder == null ) {
-			childBuilder = new HTMLElementBuilder ( tagName );
-			childElementBuilders.put ( tagName , childBuilder );
-		}
-
+	public HTMLElementBuilder addChild ( String tagName ) {
+		HTMLElementBuilder childBuilder = new HTMLElementBuilder ( tagName );
+		childElementBuilders.add ( childBuilder );
 		return childBuilder;
 	}
 
-	public HTMLElement build ( ) {
+	public HTMLElementBuilder getOrCreate ( String tagName ) {
+		HTMLElementBuilder childBuilder = getChildByTagName ( tagName );
+		if ( childBuilder == null ) {
+			childBuilder = addChild ( tagName );
+		}
+		return childBuilder;
+	}
+
+	public HTMLElementBuilder getChildByTagName ( String tagName ) {
+		return getChildByTagName ( tagName , 0 );
+	}
+
+	public HTMLElementBuilder getChildByTagName ( String tagName , int index ) {
+		List<HTMLElementBuilder> matchingChildBuilders = new ArrayList<> ( );
+
+		for ( HTMLElementBuilder builder : childElementBuilders ) {
+			if ( builder.tagName.equalsIgnoreCase ( tagName ) ) {
+				matchingChildBuilders.add ( builder );
+			}
+		}
+
+		if ( matchingChildBuilders.size ( ) > index ) {
+			return matchingChildBuilders.get ( index );
+		}
+
+		return null;
+	}
+
+	private List<HTMLElement> buildChildren ( ) {
 		List<HTMLElement> children = new ArrayList<> ( );
 
-		for ( HTMLElementBuilder builder : childElementBuilders.values ( ) ) {
+		for ( HTMLElementBuilder builder : childElementBuilders ) {
 			children.add ( builder.build ( ) );
 		}
 
+		return children;
+	}
+
+	public HTMLElement build ( ) {
+		List<HTMLElement> children = buildChildren ( );
 		return new HTMLElement ( tagName , text , attributes , children , isEmptyElement );
 	}
 }

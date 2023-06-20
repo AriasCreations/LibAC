@@ -19,32 +19,40 @@ class HTMLElement {
 		this.isEmptyElement = isEmptyElement;
 	}
 
+	public String getTagName ( ) {
+		return tagName;
+	}
+
 	public String generateHTML ( ) {
 		StringBuilder builder = new StringBuilder ( );
 
+		boolean addEndingTag = true;
 		if ( "!doctype".equalsIgnoreCase ( tagName ) ) {
 			builder.append ( "<!" ).append ( tagName ).append ( " " ).append ( text ).append ( ">" );
-			return builder.toString ( );
+			addEndingTag = false;
+			text = null;
 		}
+		else {
 
-		builder.append ( "<" ).append ( tagName );
+			builder.append ( "<" ).append ( tagName );
 
-		for ( HTMLAttribute attribute : attributes ) {
-			builder.append ( " " )
-					.append ( attribute.getName ( ) );
+			for ( HTMLAttribute attribute : attributes ) {
+				builder.append ( " " )
+						.append ( attribute.getName ( ) );
 
-			String value = attribute.getValue ( );
-			if ( value != null ) {
-				builder.append ( "=\"" ).append ( value ).append ( "\"" );
+				String value = attribute.getValue ( );
+				if ( value != null ) {
+					builder.append ( "=\"" ).append ( value ).append ( "\"" );
+				}
 			}
+			if ( isEmptyElement ) {
+				builder.append ( " />" );
+				return builder.toString ( );
+			}
+
+			builder.append ( ">" );
 		}
 
-		if ( isEmptyElement ) {
-			builder.append ( " />" );
-			return builder.toString ( );
-		}
-
-		builder.append ( ">" );
 
 		if ( text != null ) {
 			builder.append ( text );
@@ -55,7 +63,8 @@ class HTMLElement {
 			}
 		}
 
-		builder.append ( "</" ).append ( tagName ).append ( ">" );
+		if ( addEndingTag )
+			builder.append ( "</" ).append ( tagName ).append ( ">" );
 
 		return builder.toString ( );
 	}
