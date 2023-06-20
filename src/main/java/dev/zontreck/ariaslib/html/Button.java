@@ -2,14 +2,12 @@ package dev.zontreck.ariaslib.html;
 
 import dev.zontreck.ariaslib.html.bootstrap.Color;
 
-public class Button extends Element
-{
+public class Button {
 	public Color elementColor = Color.Primary;
-	public boolean isOutline=false;
-	public boolean isDisabled=false;
+	public boolean isOutline = false;
+	public boolean isDisabled = false;
 
-	public enum ButtonSize
-	{
+	public enum ButtonSize {
 		Normal,
 		Large,
 		Small
@@ -20,15 +18,8 @@ public class Button extends Element
 	public String label = "Click me";
 
 
-	public Button (String label) {
-		super("button");
-		this.label=label;
-	}
-
-	private String getSizeText()
-	{
-		switch(size)
-		{
+	private String getSizeText ( ) {
+		switch ( size ) {
 			case Normal -> {
 				return "";
 			}
@@ -44,9 +35,45 @@ public class Button extends Element
 		}
 	}
 
-	@Override
-	public String toString()
-	{
-		return "<" + elementName + " type='button' class='btn " + getSizeText() + " " + (isDisabled?"disabled " : "") + "btn-" + (isOutline ? "outline-" : "") + elementColor.name ().toLowerCase (  )+ "'>" + label + "</" + elementName + ">";
+	public HTMLElementBuilder build ( ) {
+		return new HTMLElementBuilder ( "button" ).withAttribute ( "type" , "button" ).withAttribute ( "class" , "btn " + getSizeText ( ) + " " + ( isDisabled ? "disabled " : "" ) + "btn-" + ( isOutline ? "outline-" : "" ) + elementColor.name ( ).toLowerCase ( ) ).withText ( label );
 	}
+
+	public Button withLabel ( String label ) {
+		this.label = label;
+		return this;
+	}
+
+	public Button hasOutline ( ) {
+		this.isOutline = true;
+		return this;
+	}
+
+	public Button withoutOutline ( ) {
+		this.isOutline = false;
+		return this;
+	}
+
+	public Button isDisabled ( ) {
+		this.isDisabled = true;
+		return this;
+	}
+
+	public Button isEnabled ( ) {
+		this.isDisabled = false;
+		return this;
+	}
+
+	public Button withButtonSize ( ButtonSize size ) {
+		this.size = size;
+		return this;
+	}
+
+
+	public Button withColor ( Color color ) {
+		this.elementColor = color;
+		return this;
+	}
+
+
 }
