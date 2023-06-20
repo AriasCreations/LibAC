@@ -22,7 +22,6 @@ class HTMLElement {
 	public String generateHTML ( ) {
 		StringBuilder builder = new StringBuilder ( );
 
-
 		if ( "!doctype".equalsIgnoreCase ( tagName ) ) {
 			builder.append ( "<!" ).append ( tagName ).append ( " " ).append ( text ).append ( ">" );
 			return builder.toString ( );

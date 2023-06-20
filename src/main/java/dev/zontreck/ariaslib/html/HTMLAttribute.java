@@ -5,16 +5,20 @@ class HTMLAttribute {
 	private String name;
 	private String value;
 
-	public HTMLAttribute(String name, String value) {
+	public HTMLAttribute ( String name , String value ) {
 		this.name = name;
 		this.value = value;
 	}
 
-	public String getName() {
+	public HTMLAttribute ( String name ) {
+		this ( name , null );
+	}
+
+	public String getName ( ) {
 		return name;
 	}
 
-	public String getValue() {
+	public String getValue ( ) {
 		return value;
 	}
 }
