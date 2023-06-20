@@ -174,65 +174,58 @@ public class Bootstrap {
 	}
 
 	public static class FocusRing {
-		public static FocusRing make()
-		{
-			return new FocusRing ();
+		public static FocusRing make ( ) {
+			return new FocusRing ( );
 		}
 
 		public Colors color;
 
-		public FocusRing withColor(Colors color)
-		{
+		public FocusRing withColor ( Colors color ) {
 			this.color = color.withPrefix ( "focus-ring" );
 			return this;
 		}
 
-		public void apply(HTMLElementBuilder builder)
-		{
+		public void apply ( HTMLElementBuilder builder ) {
 			builder.addClass ( "focus-ring" );
 			color.apply ( builder );
 		}
 	}
 
 	public static class Link {
-		public static Link make()
-		{
-			return new Link ();
+		public static Link make ( ) {
+			return new Link ( );
 		}
+
 		public Colors color;
-		public Link withColor(Colors color)
-		{
-			this.color=color.withPrefix ( "link" );
+
+		public Link withColor ( Colors color ) {
+			this.color = color.withPrefix ( "link" );
 			return this;
 		}
 
-		public void apply(HTMLElementBuilder builder)
-		{
+		public void apply ( HTMLElementBuilder builder ) {
 			color.apply ( builder );
 		}
 	}
 
 	public static class Toast {
-		public static Toast make()
-		{
-			return new Toast ();
+		public static Toast make ( ) {
+			return new Toast ( );
 		}
 
 		public Icons icon;
 
-		public Toast withIcon(Icons icon)
-		{
-			this.icon=icon;
+		public Toast withIcon ( Icons icon ) {
+			this.icon = icon;
 			return this;
 		}
 
-		public Toast()
-		{
+		public Toast ( ) {
 			toastHeader = new HTMLElementBuilder ( "div" ).addClass ( "toast-header" );
-			toastHeader.addChild ( "svg" ).addClass ( "bi" ).addClass ( icon.getClassName() ).addClass ( "rounded" );
+			toastHeader.addChild ( "svg" ).addClass ( "bi" ).addClass ( icon.getClassName ( ) ).addClass ( "rounded" );
 			toastHeader.addChild ( "strong" ).addClass ( "me-auto" );
 			toastHeader.addChild ( "small" ).withText ( "Text?" );
-			toastHeader.addChild ( "button" ).withAttribute ( "type", "button" ).addClass ( "btn-close" ).withAttribute ( "data-bs-dismiss", "toast" ).withAttribute ( "aria-label", "Close" );
+			toastHeader.addChild ( "button" ).withAttribute ( "type" , "button" ).addClass ( "btn-close" ).withAttribute ( "data-bs-dismiss" , "toast" ).withAttribute ( "aria-label" , "Close" );
 
 			toastBody = new HTMLElementBuilder ( "div" ).addClass ( "toast-body" );
 		}
@@ -240,11 +233,58 @@ public class Bootstrap {
 		public HTMLElementBuilder toastHeader;
 		public HTMLElementBuilder toastBody;
 
-		public void apply(HTMLElementBuilder builder)
-		{
-			var toast = builder.addChild ( "div" ).addClass ( "toast" ).withAttribute ( "role", "alert" ).withAttribute ( "aria-live", "assertive" ).withAttribute ( "aria-atomic", "true" );
+		public void apply ( HTMLElementBuilder builder ) {
+			var toast = builder.addChild ( "div" ).addClass ( "toast" ).withAttribute ( "role" , "alert" ).withAttribute ( "aria-live" , "assertive" ).withAttribute ( "aria-atomic" , "true" );
 			toast.addChild ( toastHeader );
 			toast.addChild ( toastBody );
+		}
+	}
+
+	public static class Button {
+		public static Button make ( ) {
+			return new Button ( );
+		}
+
+
+		public Colors color;
+		public boolean outline;
+
+		public Button withColor ( Colors color ) {
+			this.color = color;
+			return this;
+		}
+
+		public Button setOutline ( ) {
+			outline = true;
+			return this;
+		}
+
+		public Size size;
+
+		public Button withSize ( Size size ) {
+			this.size = size;
+			return this;
+		}
+
+
+		public void apply ( HTMLElementBuilder builder ) {
+			builder.addClass ( "btn" );
+
+			if ( outline ) {
+				color.withPrefix ( "btn-outline" );
+			}
+			else color.withPrefix ( "btn" );
+
+			color.apply ( builder );
+			if ( size != Size.Regular )
+				builder.addClass ( "btn" + size.sizeText ( ) );
+		}
+
+	}
+
+	public static class Disabled {
+		public static void setDisabled ( HTMLElementBuilder builder ) {
+			builder.withAttribute ( "disabled" );
 		}
 	}
 }
