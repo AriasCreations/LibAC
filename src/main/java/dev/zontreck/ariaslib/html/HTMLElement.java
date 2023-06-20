@@ -26,33 +26,32 @@ class HTMLElement {
 	public String generateHTML ( ) {
 		StringBuilder builder = new StringBuilder ( );
 
-		boolean addEndingTag = true;
 		if ( "!doctype".equalsIgnoreCase ( tagName ) ) {
 			builder.append ( "<!" ).append ( tagName ).append ( " " ).append ( text ).append ( ">" );
-			addEndingTag = false;
-			text = null;
-		}
-		else {
-
-			builder.append ( "<" ).append ( tagName );
-
-			for ( HTMLAttribute attribute : attributes ) {
-				builder.append ( " " )
-						.append ( attribute.getName ( ) );
-
-				String value = attribute.getValue ( );
-				if ( value != null ) {
-					builder.append ( "=\"" ).append ( value ).append ( "\"" );
-				}
+			for ( HTMLElement child : children ) {
+				builder.append ( child.generateHTML ( ) );
 			}
-			if ( isEmptyElement ) {
-				builder.append ( " />" );
-				return builder.toString ( );
-			}
-
-			builder.append ( ">" );
+			return builder.toString ( );
 		}
 
+		builder.append ( "<" ).append ( tagName );
+
+		for ( HTMLAttribute attribute : attributes ) {
+			builder.append ( " " )
+					.append ( attribute.getName ( ) );
+
+			String value = attribute.getValue ( );
+			if ( value != null ) {
+				builder.append ( "=\"" ).append ( value ).append ( "\"" );
+			}
+		}
+
+		if ( isEmptyElement ) {
+			builder.append ( " />" );
+			return builder.toString ( );
+		}
+
+		builder.append ( ">" );
 
 		if ( text != null ) {
 			builder.append ( text );
@@ -63,8 +62,7 @@ class HTMLElement {
 			}
 		}
 
-		if ( addEndingTag )
-			builder.append ( "</" ).append ( tagName ).append ( ">" );
+		builder.append ( "</" ).append ( tagName ).append ( ">" );
 
 		return builder.toString ( );
 	}

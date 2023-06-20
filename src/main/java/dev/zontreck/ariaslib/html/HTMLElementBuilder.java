@@ -8,13 +8,11 @@ class HTMLElementBuilder {
 	private String tagName;
 	private String text;
 	private List<HTMLAttribute> attributes;
-	private boolean isEmptyElement;
 	private List<HTMLElementBuilder> childElementBuilders;
 
 	public HTMLElementBuilder ( String tagName ) {
 		this.tagName = tagName;
 		this.attributes = new ArrayList<> ( );
-		this.isEmptyElement = false;
 		this.childElementBuilders = new ArrayList<> ( );
 	}
 
@@ -35,9 +33,28 @@ class HTMLElementBuilder {
 		return this;
 	}
 
-	public HTMLElementBuilder setEmptyElement ( ) {
-		this.isEmptyElement = true;
+	public HTMLElementBuilder addClass ( String className ) {
+		ClassAttribute classAttribute = getClassAttribute ( );
+		if ( classAttribute == null ) {
+			classAttribute = new ClassAttribute ( className );
+			this.attributes.add ( classAttribute );
+		}
+		else {
+			String existingValue = classAttribute.getValue ( );
+			classAttribute = new ClassAttribute ( existingValue + " " + className );
+			this.attributes.removeIf ( attr -> attr.getName ( ).equalsIgnoreCase ( "class" ) );
+			this.attributes.add ( classAttribute );
+		}
 		return this;
+	}
+
+	private ClassAttribute getClassAttribute ( ) {
+		for ( HTMLAttribute attribute : attributes ) {
+			if ( attribute instanceof ClassAttribute ) {
+				return ( ClassAttribute ) attribute;
+			}
+		}
+		return null;
 	}
 
 	public HTMLElementBuilder addChild ( HTMLElementBuilder childBuilder ) {
@@ -79,6 +96,16 @@ class HTMLElementBuilder {
 		return null;
 	}
 
+	private boolean hasTextOrChildren ( ) {
+		return text != null || ! childElementBuilders.isEmpty ( );
+	}
+
+	public HTMLElement build ( ) {
+		List<HTMLElement> children = buildChildren ( );
+		boolean isEmptyElement = ! hasTextOrChildren ( );
+		return new HTMLElement ( tagName , text , attributes , children , isEmptyElement );
+	}
+
 	private List<HTMLElement> buildChildren ( ) {
 		List<HTMLElement> children = new ArrayList<> ( );
 
@@ -87,10 +114,5 @@ class HTMLElementBuilder {
 		}
 
 		return children;
-	}
-
-	public HTMLElement build ( ) {
-		List<HTMLElement> children = buildChildren ( );
-		return new HTMLElement ( tagName , text , attributes , children , isEmptyElement );
 	}
 }
