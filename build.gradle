@@ -46,6 +46,8 @@ dependencies {
     implementation 'com.google.guava:guava:31.1-jre'
 }
 
+def MAVEN_PASSWORD_PROPERTY = "AriasCreationsMavenPassword"
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
@@ -54,7 +56,14 @@ publishing {
     }
     repositories {
         maven {
-            url "file://${project.projectDir}/final"
+            url = "https://maven.zontreck.dev/repository/ariascreations"
+            name = "ariascreations"
+            if (project.findProperty(MAVEN_PASSWORD_PROPERTY) != null) {
+                credentials {
+                    username = "admin"
+                    password = project.findProperty(MAVEN_PASSWORD_PROPERTY)
+                }
+            }
         }
     }
 }
