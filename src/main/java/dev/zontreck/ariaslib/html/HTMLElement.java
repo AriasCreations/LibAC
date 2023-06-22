@@ -4,7 +4,7 @@ import java.util.List;
 
 
 // HTML element class supporting tag attributes
-class HTMLElement {
+public class HTMLElement {
 	private String tagName;
 	private String text;
 	private List<HTMLAttribute> attributes;
