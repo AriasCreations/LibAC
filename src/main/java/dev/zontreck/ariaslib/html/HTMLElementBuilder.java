@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 // Builder class for building HTML elements
-class HTMLElementBuilder {
+public class HTMLElementBuilder {
 	private String tagName;
 	private String text;
 	private List<HTMLAttribute> attributes;
