@@ -39,8 +39,13 @@ public class DOM {
 	}
 
 	public static void addPopOverScan ( HTMLElementBuilder builder ) {
-		builder.getChildByTagName ( "html" ).getChildByTagName ( "body" ).addChild ( "script" ).withAttribute ( "type" , "script/javascript" ).withText ( "const popoverTriggerList = document.querySelectorAll('[data-bs-toggle=\"popover\"]');\n" +
-				"const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));" );
+		builder.getChildByTagName ( "html" ).getChildByTagName ( "body" ).addChild ( "script" ).withAttribute ( "type" , "script/javascript" ).withText ( "" +
+				"function scanPopOver()" +
+				"{" +
+				"var popoverTriggerList = document.querySelectorAll('[data-bs-toggle=\"popover\"]');\n" +
+				"var popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));" +
+				"" +
+				"}" );
 	}
 
 
