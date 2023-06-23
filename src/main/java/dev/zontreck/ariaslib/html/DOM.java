@@ -31,7 +31,15 @@ public class DOM {
 				"const popoverTriggerList = document.querySelectorAll('[data-bs-toggle=\"popover\"]')\n" +
 				"const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));" +
 				"</script>" +
-				"\n";
+				"\n\n" +
+				"    <style>\n" +
+				"      .command-popover{\n" +
+				"        --bs-popover-header-bg: var(--bs-info);\n" +
+				"        --bs-popover-header-color: var(--bs-dark);\n" +
+				"        --bs-popover-bg: var(--bs-dark);\n" +
+				"        --bs-popover-body-color: var(--bs-light);\n" +
+				"      }\n" +
+				"    </style>";
 	}
 
 
