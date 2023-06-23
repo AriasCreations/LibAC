@@ -39,7 +39,7 @@ public class DOM {
 	}
 
 	public static void addPopOverScan ( HTMLElementBuilder builder ) {
-		builder.getChildByTagName ( "html" ).getChildByTagName ( "body" ).addChild ( "script" ).withAttribute ( "type" , "script/javascript" ).withText ( "" +
+		builder.getChildByTagName ( "html" ).getChildByTagName ( "body" ).addChild ( "script" ).withText ( "" +
 				"function scanPopOver()" +
 				"{" +
 				"var popoverTriggerList = document.querySelectorAll('[data-bs-toggle=\"popover\"]');\n" +
