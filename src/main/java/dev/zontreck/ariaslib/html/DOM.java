@@ -27,6 +27,10 @@ public class DOM {
 				"    <!-- Option 1: Bootstrap Bundle with Popper -->\n" +
 				"    \n" +
 				"    <script src=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js\" integrity=\"sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz\" crossorigin=\"anonymous\"></script>\n\n" +
+				"\n<script type='text/javascript'>" +
+				"const popoverTriggerList = document.querySelectorAll('[data-bs-toggle=\"popover\"]')\n" +
+				"const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));" +
+				"</script>" +
 				"\n";
 	}
 
