@@ -57,13 +57,13 @@ public class HTMLElement {
 		if ( text != null ) {
 			builder.append ( text );
 		}
-		else {
-			if ( ! isEmptyElement ) {
-				for ( HTMLElement child : children ) {
-					builder.append ( child.generateHTML ( ) );
-				}
+
+		if ( ! isEmptyElement ) {
+			for ( HTMLElement child : children ) {
+				builder.append ( child.generateHTML ( ) );
 			}
 		}
+
 
 		builder.append ( "</" ).append ( tagName ).append ( ">\n" );
 
