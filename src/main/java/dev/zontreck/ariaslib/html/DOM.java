@@ -3,7 +3,6 @@ package dev.zontreck.ariaslib.html;
 public class DOM {
 
 
-
 	public static HTMLElementBuilder beginBootstrapDOM ( String pageTitle ) {
 		var builder = new HTMLElementBuilder ( "!doctype" ).withText ( "html" );
 
@@ -24,10 +23,8 @@ public class DOM {
 		var body = html.getOrCreate ( "body" );
 		body.addChild ( "script" ).withAttribute ( "src" , "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" ).withAttribute ( "integrity" , "sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" ).withAttribute ( "crossorigin" , "anonymous" ).withText ( " " );
 
-		body.addChild ( "script" ).withAttribute ( "src" , "https://code.jquery.com/jquery-3.7.0.min.js" ).withAttribute ( "crossorigin", "anonymous" ).withText ( " " );
+		body.addChild ( "script" ).withAttribute ( "src" , "https://code.jquery.com/jquery-3.7.0.min.js" ).withAttribute ( "crossorigin" , "anonymous" ).withText ( " " );
 
-		body.addChild ( "script" ).withAttribute ( "type" , "text/javascript" ).withText ( "const popoverTriggerList = document.querySelectorAll('[data-bs-toggle=\"popover\"]');\n" +
-				"const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));" );
 		body.addChild ( "style" ).withText ( "\n" +
 				"      .command-popover{\n" +
 				"        --bs-popover-header-bg: var(--bs-info);\n" +
@@ -39,6 +36,11 @@ public class DOM {
 
 		return builder;
 
+	}
+
+	public static void addPopOverScan ( HTMLElementBuilder builder ) {
+		builder.getChildByTagName ( "html" ).getChildByTagName ( "body" ).addChild ( "script" ).withAttribute ( "type" , "script/javascript" ).withText ( "const popoverTriggerList = document.querySelectorAll('[data-bs-toggle=\"popover\"]');\n" +
+				"const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));" );
 	}
 
 
