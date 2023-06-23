@@ -1,46 +1,7 @@
 package dev.zontreck.ariaslib.html;
 
 public class DOM {
-	/**
-	 * Generates a HTML Header that automatically includes dependencies
-	 *
-	 * @return HTML
-	 */
-	public static String getHTMLHeader ( String pageTitle ) {
-		return "<!doctype html>\n" +
-				"<html lang=\"en\">\n" +
-				"  <head>\n" +
-				"    <!-- Required meta tags -->\n" +
-				"    <meta charset=\"utf-8\">\n" +
-				"    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n" +
-				"\n" +
-				"    <!-- Bootstrap CSS -->\n" +
-				"    \n" +
-				"    <link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css\" rel=\"stylesheet\" integrity=\"sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM\" crossorigin=\"anonymous\">\n\n" +
-				"\n" +
-				"    <title>" + pageTitle + "</title>\n" +
-				"  </head>\n" +
-				"  <body>\n" +
-				"\n" +
-				"    <!-- Optional JavaScript; choose one of the two! -->\n" +
-				"\n" +
-				"    <!-- Option 1: Bootstrap Bundle with Popper -->\n" +
-				"    \n" +
-				"    <script src=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js\" integrity=\"sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz\" crossorigin=\"anonymous\"></script>\n\n" +
-				"\n<script type='text/javascript'>" +
-				"const popoverTriggerList = document.querySelectorAll('[data-bs-toggle=\"popover\"]')\n" +
-				"const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));" +
-				"</script>" +
-				"\n\n" +
-				"    <style>\n" +
-				"      .command-popover{\n" +
-				"        --bs-popover-header-bg: var(--bs-info);\n" +
-				"        --bs-popover-header-color: var(--bs-dark);\n" +
-				"        --bs-popover-bg: var(--bs-dark);\n" +
-				"        --bs-popover-body-color: var(--bs-light);\n" +
-				"      }\n" +
-				"    </style>";
-	}
+
 
 
 	public static HTMLElementBuilder beginBootstrapDOM ( String pageTitle ) {

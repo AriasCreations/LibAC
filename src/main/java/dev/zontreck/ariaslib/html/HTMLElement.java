@@ -27,7 +27,7 @@ public class HTMLElement {
 		StringBuilder builder = new StringBuilder ( );
 
 		if ( "!doctype".equalsIgnoreCase ( tagName ) ) {
-			builder.append ( "<" ).append ( tagName ).append ( " " ).append ( text ).append ( ">" );
+			builder.append ( "<" ).append ( tagName ).append ( " " ).append ( text ).append ( ">\n" );
 			for ( HTMLElement child : children ) {
 				builder.append ( child.generateHTML ( ) );
 			}
@@ -46,23 +46,26 @@ public class HTMLElement {
 			}
 		}
 
+		/*
 		if ( isEmptyElement ) {
-			builder.append ( " />" );
+			builder.append ( " />\n" );
 			return builder.toString ( );
-		}
+		}*/
 
-		builder.append ( ">" );
+		builder.append ( ">\n" );
 
 		if ( text != null ) {
 			builder.append ( text );
 		}
 		else {
-			for ( HTMLElement child : children ) {
-				builder.append ( child.generateHTML ( ) );
+			if ( ! isEmptyElement ) {
+				for ( HTMLElement child : children ) {
+					builder.append ( child.generateHTML ( ) );
+				}
 			}
 		}
 
-		builder.append ( "</" ).append ( tagName ).append ( ">" );
+		builder.append ( "</" ).append ( tagName ).append ( ">\n" );
 
 		return builder.toString ( );
 	}
