@@ -26,7 +26,7 @@ public class DOM {
 
 		body.addChild ( "script" ).withAttribute ( "src" , "https://code.jquery.com/jquery-3.7.0.min.js" ).withAttribute ( "crossorigin", "anonymous" ).withText ( " " );
 
-		body.addChild ( "script" ).withAttribute ( "type" , "text/javascript" ).withText ( "const popoverTriggerList = document.querySelectorAll('[data-bs-toggle=\"popover\"]')\n" +
+		body.addChild ( "script" ).withAttribute ( "type" , "text/javascript" ).withText ( "const popoverTriggerList = document.querySelectorAll('[data-bs-toggle=\"popover\"]');\n" +
 				"const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl));" );
 		body.addChild ( "style" ).withText ( "\n" +
 				"      .command-popover{\n" +
