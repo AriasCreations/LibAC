@@ -27,7 +27,7 @@ public class HTMLElement {
 		StringBuilder builder = new StringBuilder ( );
 
 		if ( "!doctype".equalsIgnoreCase ( tagName ) ) {
-			builder.append ( "<!" ).append ( tagName ).append ( " " ).append ( text ).append ( ">" );
+			builder.append ( "<" ).append ( tagName ).append ( " " ).append ( text ).append ( ">" );
 			for ( HTMLElement child : children ) {
 				builder.append ( child.generateHTML ( ) );
 			}
