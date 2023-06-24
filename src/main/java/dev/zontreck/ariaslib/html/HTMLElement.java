@@ -52,7 +52,7 @@ public class HTMLElement {
 			return builder.toString ( );
 		}*/
 
-		builder.append ( ">\n" );
+		builder.append ( ">" );
 
 		if ( text != null ) {
 			builder.append ( text );
