@@ -80,6 +80,9 @@ public class EventBus
                         eventContainer.function.invoke(eventContainer.containingClass, event);
                     } catch (IllegalAccessException|IllegalArgumentException|InvocationTargetException | SecurityException e) {
                         e.printStackTrace();
+                    } catch (Exception e)
+                    {
+                        event.exceptionThrown=true;
                     }
 
                     cancelled=event.isCancelled();
