@@ -37,7 +37,7 @@ repositories {
     // Use Maven Central for resolving dependencies.
     // mavenCentral()
     maven {
-        url = "https://maven.zontreck.dev"
+        url = "https://maven.zontreck.dev/repository/internal"
         name = "Aria's Creations"
     }
 }
