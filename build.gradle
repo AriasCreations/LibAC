@@ -35,7 +35,11 @@ version = determinePatchVersion()
 version = "${apiVer}.${version}"
 repositories {
     // Use Maven Central for resolving dependencies.
-    mavenCentral()
+    // mavenCentral()
+    maven {
+        url = "https://maven.zontreck.dev"
+        name = "Aria's Creations"
+    }
 }
 
 dependencies {
