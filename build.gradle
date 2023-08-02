@@ -79,7 +79,7 @@ publishing {
     }
 }
 
-compileJava.finalizedBy("sourceJar")
+compileJava.finalizedBy("sourcesJar")
 artifacts {
     archives jar
     archives sourcesJar
