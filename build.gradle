@@ -53,9 +53,24 @@ dependencies {
 
 def MAVEN_PASSWORD_PROPERTY = "AriasCreationsMavenPassword"
 
+task sourceJar(type: Jar) {
+    from sourceSets.main.output
+    from sourceSets.main.allJava
+    archiveClassifier("sources")
+
+    manifest {
+        attributes([
+                "Specification-Title": project.name,
+                "Specification-Vendor": "zontreck",
+                "Specification-Version":"${version}"
+        ])
+    }
+}
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
+            artifact sourceJar
             artifact jar
         }
     }
@@ -71,4 +86,10 @@ publishing {
             }
         }
     }
+}
+
+compileJava.finalizedBy("sourceJar")
+artifacts {
+    jar
+    sourceJar
 }
