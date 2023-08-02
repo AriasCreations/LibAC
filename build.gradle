@@ -10,12 +10,17 @@ plugins {
     // Apply the java-library plugin for API and implementation separation.
     id 'java-library'
     id 'idea'
+    id 'eclipse'
     id 'maven-publish'
 }
 
 group = "dev.zontreck"
 archivesBaseName = "LibAC"
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(17)
+    withSourcesJar()
+}
 
 def determinePatchVersion = {
     // get the name of the last tag
@@ -53,23 +58,10 @@ dependencies {
 
 def MAVEN_PASSWORD_PROPERTY = "AriasCreationsMavenPassword"
 
-task sourceJar(type: Jar) {
-    from sourceSets.main.allJava
-    archiveClassifier = "sources"
-
-    manifest {
-        attributes([
-                "Specification-Title": project.name,
-                "Specification-Vendor": "zontreck",
-                "Specification-Version":"${version}"
-        ])
-    }
-}
-
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifact sourceJar
+            artifact sourcesJar
             artifact jar
         }
     }
@@ -90,5 +82,5 @@ publishing {
 compileJava.finalizedBy("sourceJar")
 artifacts {
     archives jar
-    archives sourceJar
+    archives sourcesJar
 }
