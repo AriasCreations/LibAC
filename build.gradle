@@ -54,9 +54,8 @@ dependencies {
 def MAVEN_PASSWORD_PROPERTY = "AriasCreationsMavenPassword"
 
 task sourceJar(type: Jar) {
-    from sourceSets.main.output
     from sourceSets.main.allJava
-    archiveClassifier("sources")
+    archiveClassifier = "sources"
 
     manifest {
         attributes([
@@ -90,6 +89,6 @@ publishing {
 
 compileJava.finalizedBy("sourceJar")
 artifacts {
-    jar
-    sourceJar
+    archives jar
+    archives sourceJar
 }
