@@ -1,31 +1,26 @@
 package dev.zontreck.ariaslib.events;
 
+import com.google.common.collect.Lists;
+import dev.zontreck.eventsbus.Cancellable;
+import dev.zontreck.eventsbus.Event;
+
 import java.util.List;
 
-import com.google.common.collect.Lists;
+@Cancellable
+public class CommandEvent extends Event {
+	public String command;
+	public List<String> arguments = Lists.newArrayList();
 
-public class CommandEvent extends Event
-{
-    public String command;
-    public List<String> arguments = Lists.newArrayList();
-    public CommandEvent(String commandString)
-    {
-        String[] cmds = commandString.split(" ");
-        if(cmds.length > 0)
-        {
-            command = cmds[0];
-            if(cmds.length==1)return;
-            for(int i=1;i<cmds.length;i++)
-            {
-                arguments.add(cmds[i]);
-            }
+	public CommandEvent(String commandString) {
+		String[] cmds = commandString.split(" ");
+		if (cmds.length > 0) {
+			command = cmds[0];
+			if (cmds.length == 1) return;
+			for (int i = 1; i < cmds.length; i++) {
+				arguments.add(cmds[i]);
+			}
 
-        }else throw new IllegalArgumentException("The command cannot be empty!");
-    }
+		} else throw new IllegalArgumentException("The command cannot be empty!");
+	}
 
-    @Override
-    public boolean isCancellable() {
-        return true;
-    }
-    
 }
