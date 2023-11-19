@@ -5,33 +5,26 @@ import dev.zontreck.ariaslib.util.DelayedExecutorService;
 import dev.zontreck.eventsbus.Bus;
 
 import java.io.Console;
-import java.lang.reflect.InvocationTargetException;
 
 public class ConsolePrompt extends Task {
-	public static final Console console = System.console();
+    public static final Console console = System.console();
 
-	public ConsolePrompt() {
-		super("ConsolePrompt", true);
-	}
+    public ConsolePrompt() {
+        super("ConsolePrompt", true);
+    }
 
 
-	@Override
-	public void run() {
-		// Print a prompt
-		console.printf("\n" + Terminal.PREFIX + " > ");
-		String commandInput = console.readLine();
+    @Override
+    public void run() {
+        // Print a prompt
+        console.printf("\n" + Terminal.PREFIX + " > ");
+        String commandInput = console.readLine();
 
-		CommandEvent event = new CommandEvent(commandInput);
-		try {
-			if (!Bus.Post(event)) {
-				DelayedExecutorService.getInstance().schedule(new ConsolePrompt(), 2);
-			}
-		} catch (InvocationTargetException e) {
-			throw new RuntimeException(e);
-		} catch (IllegalAccessException e) {
-			throw new RuntimeException(e);
-		}
+        CommandEvent event = new CommandEvent(commandInput);
+        if (!Bus.Post(event)) {
+            DelayedExecutorService.getInstance().schedule(new ConsolePrompt(), 2);
+        }
 
-	}
+    }
 
 }
