@@ -12,10 +12,6 @@ public class ArgumentsParser {
                     defaultArg = defaults.getArg(arg.name);
                 }
 
-                if (i + 1 < args.length) {
-                    i++;
-                }
-
                 if (!arg.hasValue) {
                     if (defaultArg != null) {
                         arg = defaultArg;
