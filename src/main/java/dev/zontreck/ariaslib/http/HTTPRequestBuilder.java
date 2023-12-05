@@ -101,10 +101,11 @@ public class HTTPRequestBuilder
             byte[] array = request.body.getBytes("UTF-8");
             connection.setRequestProperty("Content-Length" , "" + array.length);
             connection.setRequestProperty("Content-Type", request.contentType);
+            connection.setDoInput(true);
+            connection.setUseCaches(false);
             connection.setDoOutput(true);
             DataOutputStream dos = new DataOutputStream(connection.getOutputStream());
             dos.write(array);
-            connection.setDoInput(true);
             dos.flush();
             dos.close();
 
