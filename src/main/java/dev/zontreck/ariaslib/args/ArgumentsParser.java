@@ -20,7 +20,7 @@ public class ArgumentsParser {
 
     public static Argument parseArgument(String arg) {
         if (arg.startsWith("--")) {
-            String[] parts = arg.split("=", 2);
+            String[] parts = arg.split("=", 1);
             if (parts.length == 1) {
                 return new Argument(parts[0].substring(2));
             } else {
