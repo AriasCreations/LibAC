@@ -23,4 +23,8 @@ public class Arguments {
         }
 
     }
+
+    public boolean hasArg(String argName) {
+        return args.containsKey(argName);
+    }
 }
