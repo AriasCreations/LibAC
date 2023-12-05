@@ -10,178 +10,174 @@ import java.util.List;
 import java.util.Map;
 
 public class JsonObject {
-	private Map<String, Object> data;
+    private Map<String, Object> data;
 
-	public JsonObject() {
-		data = new HashMap<>();
-	}
+    public JsonObject() {
+        data = new HashMap<>();
+    }
 
-	public JsonObject(Map<String, Object> dat)
-	{
-		data = new HashMap<> ( dat );
-	}
+    public JsonObject(Map<String, Object> dat) {
+        data = new HashMap<>(dat);
+    }
 
-	public void put(String key, Object value) {
-		data.put(key, value);
-	}
+    public static JsonObject parseJSON(InputStream inputStream) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        StringBuilder jsonString = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            jsonString.append(line);
+        }
+        return parseJsonObject(jsonString.toString());
+    }
 
-	public Object get(String key) {
-		return data.get(key);
-	}
+    private static JsonObject parseJsonObject(String jsonString) {
+        JsonObject jsonObject = new JsonObject();
+        jsonString = jsonString.trim();
+        if (jsonString.startsWith("{") && jsonString.endsWith("}")) {
+            jsonString = jsonString.substring(1, jsonString.length() - 1);
+            String[] keyValuePairs = jsonString.split(",");
+            for (String pair : keyValuePairs) {
+                String[] keyValue = pair.split(":");
+                if (keyValue.length == 2) {
+                    String key = keyValue[0].trim().replace("\"", "");
+                    String value = keyValue[1].trim();
+                    jsonObject.put(key, parseValue(value));
+                }
+            }
+        }
+        return jsonObject;
+    }
 
-	public void merge(Map<String,Object> ret)
-	{
-		data.putAll ( ret );
-	}
+    private static Object parseValue(String value) {
+        if (value.startsWith("{") && value.endsWith("}")) {
+            return parseJsonObject(value);
+        } else if (value.startsWith("[") && value.endsWith("]")) {
+            return parseJSONArray(value);
+        } else if (value.startsWith("\"") && value.endsWith("\"")) {
+            return value.substring(1, value.length() - 1);
+        } else if (value.equalsIgnoreCase("true")) {
+            return true;
+        } else if (value.equalsIgnoreCase("false")) {
+            return false;
+        } else if (value.equalsIgnoreCase("null")) {
+            return null;
+        } else {
+            try {
+                return Integer.parseInt(value);
+            } catch (NumberFormatException e) {
+                try {
+                    return Double.parseDouble(value);
+                } catch (NumberFormatException ex) {
+                    return value;
+                }
+            }
+        }
+    }
 
-	public Map<String, Object> getMap()
-	{
-		return new HashMap<> ( data );
-	}
+    private static List<Object> parseJSONArray(String jsonArray) {
+        List<Object> list = new ArrayList<>();
+        jsonArray = jsonArray.trim();
+        if (jsonArray.startsWith("[") && jsonArray.endsWith("]")) {
+            jsonArray = jsonArray.substring(1, jsonArray.length() - 1);
+            String[] elements = jsonArray.split(",");
+            for (String element : elements) {
+                list.add(parseValue(element.trim()));
+            }
+        }
+        return list;
+    }
 
-	public void add(String key, Object value) {
-		if (data.containsKey(key)) {
-			Object existingValue = data.get(key);
-			if (existingValue instanceof List) {
-				((List<Object>) existingValue).add(value);
-			} else {
-				List<Object> list = new ArrayList<>();
-				list.add(existingValue);
-				list.add(value);
-				data.put(key, list);
-			}
-		} else {
-			data.put(key, value);
-		}
-	}
+    public void put(String key, Object value) {
+        data.put(key, value);
+    }
 
-	public String toJSONString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("{");
+    public Object get(String key) {
+        return data.get(key);
+    }
 
-		boolean first = true;
-		for (Map.Entry<String, Object> entry : data.entrySet()) {
-			if (!first) {
-				sb.append(",");
-			}
-			first = false;
+    public void merge(Map<String, Object> ret) {
+        data.putAll(ret);
+    }
 
-			sb.append("\"");
-			sb.append(escape(entry.getKey()));
-			sb.append("\":");
-			sb.append(toJSONValue(entry.getValue()));
-		}
+    public Map<String, Object> getMap() {
+        return new HashMap<>(data);
+    }
 
-		sb.append("}");
-		return sb.toString();
-	}
+    public void add(String key, Object value) {
+        if (data.containsKey(key)) {
+            Object existingValue = data.get(key);
+            if (existingValue instanceof List) {
+                ((List<Object>) existingValue).add(value);
+            } else {
+                List<Object> list = new ArrayList<>();
+                list.add(existingValue);
+                list.add(value);
+                data.put(key, list);
+            }
+        } else {
+            data.put(key, value);
+        }
+    }
 
-	private String escape(String str) {
-		if(str == null)return "";
-		// Add necessary escape characters (e.g., double quotes, backslashes)
-		// You can implement this method based on your specific requirements.
-		// This is a simplified version for demonstration purposes.
-		return str.replace("\"", "\\\"");
-	}
+    public String toJSONString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("{");
 
-	private String toJSONValue(Object value) {
-		if (value instanceof String) {
-			return "\"" + escape(value.toString()) + "\"";
-		} else if (value instanceof JsonObject js) {
-			return js.toJSONString();
-		} else if (value instanceof List) {
-			return toJSONList ( ( List<Object> ) value );
-		} else if(value instanceof Map<?,?> mp )
-		{
-			return new JsonObject ( (Map<String, Object> ) mp ).toJSONString ();
-		} else {
-			return value.toString();
-		}
-	}
+        boolean first = true;
+        for (Map.Entry<String, Object> entry : data.entrySet()) {
+            if (!first) {
+                sb.append(",");
+            }
+            first = false;
 
-	private String toJSONList(List<Object> list) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("[");
+            sb.append("\"");
+            sb.append(escape(entry.getKey()));
+            sb.append("\":");
+            sb.append(toJSONValue(entry.getValue()));
+        }
 
-		boolean first = true;
-		for (Object item : list) {
-			if (!first) {
-				sb.append(",");
-			}
-			first = false;
+        sb.append("}");
+        return sb.toString();
+    }
 
-			sb.append(toJSONValue(item));
-		}
+    private String escape(String str) {
+        if (str == null) return "";
+        // Add necessary escape characters (e.g., double quotes, backslashes)
+        // You can implement this method based on your specific requirements.
+        // This is a simplified version for demonstration purposes.
+        return str.replace("\"", "\\\"");
+    }
 
-		sb.append("]");
-		return sb.toString();
-	}
+    private String toJSONValue(Object value) {
+        if (value instanceof String) {
+            return "\"" + escape(value.toString()) + "\"";
+        } else if (value instanceof JsonObject) {
+            return ((JsonObject) value).toJSONString();
+        } else if (value instanceof List) {
+            return toJSONList((List<Object>) value);
+        } else if (value instanceof Map<?, ?>) {
+            return new JsonObject((Map<String, Object>) ((Map<?, ?>) value)).toJSONString();
+        } else {
+            return value.toString();
+        }
+    }
 
-	public static JsonObject parseJSON( InputStream inputStream) throws IOException {
-		BufferedReader reader = new BufferedReader(new InputStreamReader (inputStream));
-		StringBuilder jsonString = new StringBuilder();
-		String line;
-		while ((line = reader.readLine()) != null) {
-			jsonString.append(line);
-		}
-		return parseJsonObject(jsonString.toString());
-	}
+    private String toJSONList(List<Object> list) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
 
-	private static JsonObject parseJsonObject(String jsonString) {
-		JsonObject jsonObject = new JsonObject();
-		jsonString = jsonString.trim();
-		if (jsonString.startsWith("{") && jsonString.endsWith("}")) {
-			jsonString = jsonString.substring(1, jsonString.length() - 1);
-			String[] keyValuePairs = jsonString.split(",");
-			for (String pair : keyValuePairs) {
-				String[] keyValue = pair.split(":");
-				if (keyValue.length == 2) {
-					String key = keyValue[0].trim().replace("\"", "");
-					String value = keyValue[1].trim();
-					jsonObject.put(key, parseValue(value));
-				}
-			}
-		}
-		return jsonObject;
-	}
+        boolean first = true;
+        for (Object item : list) {
+            if (!first) {
+                sb.append(",");
+            }
+            first = false;
 
-	private static Object parseValue(String value) {
-		if (value.startsWith("{") && value.endsWith("}")) {
-			return parseJsonObject(value);
-		} else if (value.startsWith("[") && value.endsWith("]")) {
-			return parseJSONArray(value);
-		} else if (value.startsWith("\"") && value.endsWith("\"")) {
-			return value.substring(1, value.length() - 1);
-		} else if (value.equalsIgnoreCase("true")) {
-			return true;
-		} else if (value.equalsIgnoreCase("false")) {
-			return false;
-		} else if (value.equalsIgnoreCase("null")) {
-			return null;
-		} else {
-			try {
-				return Integer.parseInt(value);
-			} catch (NumberFormatException e) {
-				try {
-					return Double.parseDouble(value);
-				} catch (NumberFormatException ex) {
-					return value;
-				}
-			}
-		}
-	}
+            sb.append(toJSONValue(item));
+        }
 
-	private static List<Object> parseJSONArray(String jsonArray) {
-		List<Object> list = new ArrayList<>();
-		jsonArray = jsonArray.trim();
-		if (jsonArray.startsWith("[") && jsonArray.endsWith("]")) {
-			jsonArray = jsonArray.substring(1, jsonArray.length() - 1);
-			String[] elements = jsonArray.split(",");
-			for (String element : elements) {
-				list.add(parseValue(element.trim()));
-			}
-		}
-		return list;
-	}
+        sb.append("]");
+        return sb.toString();
+    }
 }
 
