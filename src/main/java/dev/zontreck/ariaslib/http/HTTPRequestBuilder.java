@@ -1,6 +1,5 @@
 package dev.zontreck.ariaslib.http;
 
-import com.sun.istack.internal.NotNull;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -30,7 +29,7 @@ public class HTTPRequestBuilder
      * @return Builder instance
      * @throws MalformedURLException If the URL supplied was invalid
      */
-    public HTTPRequestBuilder withURL(@NotNull String url) throws MalformedURLException {
+    public HTTPRequestBuilder withURL( String url) throws MalformedURLException {
         request.url = url;
         this.url = new URL(url);
 
