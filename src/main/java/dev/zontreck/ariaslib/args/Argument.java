@@ -1,10 +1,9 @@
 package dev.zontreck.ariaslib.args;
 
-public class Argument {
-    public boolean isSet = false;
+public abstract class Argument<T> {
     public boolean hasValue = false;
     public String name;
-    private String value;
+
 
     /**
      * Initializes a boolean only command line toggle
@@ -12,24 +11,24 @@ public class Argument {
      * @param name The option name
      */
     public Argument(String name) {
-        this(name, "");
+        this.name = name;
     }
 
     /**
-     * Initializes the argument with a value
+     * Retrieves the current argument's type
      *
-     * @param name  The name of the command line option
-     * @param value The value
+     * @return The argument type!
      */
-    public Argument(String name, String value) {
-        if (value != "") hasValue = true;
-        isSet = true;
-        this.name = name;
-        this.value = value;
-    }
+    public abstract ArgumentType getType();
+    
 
-    public String getValue() {
-        if (hasValue) return value;
-        else throw new IllegalArgumentException("No value");
+    /**
+     * Retrieves the value.
+     *
+     * @return The value
+     * @throws IllegalArgumentException When there is no value
+     */
+    public T getValue() throws IllegalArgumentException {
+        throw new IllegalArgumentException("No value");
     }
 }
