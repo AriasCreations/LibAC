@@ -1,6 +1,7 @@
 package dev.zontreck.ariaslib.args;
 
-public abstract class Argument<T> {
+public abstract class Argument<T> implements Cloneable
+{
     public boolean hasValue = false;
     public String name;
 
@@ -30,5 +31,31 @@ public abstract class Argument<T> {
      */
     public T getValue() throws IllegalArgumentException {
         throw new IllegalArgumentException("No value");
+    }
+
+    @Override
+    public Argument<T> clone() {
+        Argument<T> arg = null;
+        switch (getType())
+        {
+            case LONG -> {
+                arg = (Argument<T>) new LongArgument(name, (long)getValue());
+                break;
+            }
+            case STRING -> {
+                arg = (Argument<T>) new StringArgument(name, (String)getValue());
+                break;
+            }
+            case BOOLEAN -> {
+                arg = (Argument<T>) new BooleanArgument(name);
+                break;
+            }
+            case INTEGER -> {
+                arg = (Argument<T>) new IntegerArgument(name, (int)getValue());
+                break;
+            }
+        }
+
+        return arg;
     }
 }

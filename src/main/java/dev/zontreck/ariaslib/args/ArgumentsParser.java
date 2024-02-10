@@ -2,8 +2,14 @@ package dev.zontreck.ariaslib.args;
 
 public class ArgumentsParser {
 
+    /**
+     * Parses and returns the arguments list with keeping defaults in mind
+     * @param args
+     * @param defaults
+     * @return Arguments with defaults set
+     */
     public static Arguments parseArguments(String[] args, Arguments defaults) {
-        Arguments arguments = new Arguments();
+        Arguments arguments = defaults.clone();
         for (int i = 0; i < args.length; i++) {
             Argument arg = parseArgument(args[i]);
             if (arg != null) {

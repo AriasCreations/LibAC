@@ -3,9 +3,14 @@ package dev.zontreck.ariaslib.args;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Arguments {
-    private Map<String, Argument> args = new HashMap<>();
+public class Arguments implements Cloneable
+{
+    private Map<String, Argument<?>> args = new HashMap<>();
 
+    /**
+     * Set the argument in the args list
+     * @param arg
+     */
     public void setArg(Argument arg) {
         args.put(arg.name, arg);
     }
@@ -43,5 +48,16 @@ public class Arguments {
         if (hasArg(argName)) {
             return getArg(argName).hasValue;
         } else throw new IllegalArgumentException(("No such argument"));
+    }
+
+    @Override
+    public Arguments clone() {
+        Arguments arg = new Arguments();
+        for(Map.Entry<String, Argument<?>> entry : args.entrySet())
+        {
+            arg.setArg(entry.getValue().clone());
+        }
+
+        return arg;
     }
 }
