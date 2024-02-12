@@ -18,4 +18,13 @@ public class IntegerArgument extends Argument<Integer> {
     public Integer getValue() {
         return value;
     }
+
+
+    @Override
+    public String toString() {
+        return "IntegerArgument{" +
+                name + "=" +
+                value +
+                '}';
+    }
 }

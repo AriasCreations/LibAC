@@ -18,4 +18,13 @@ public class LongArgument extends Argument<Long> {
     public Long getValue() {
         return value;
     }
+
+
+    @Override
+    public String toString() {
+        return "LongArgument{" +
+                name + "=" +
+                value +
+                '}';
+    }
 }

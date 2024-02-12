@@ -12,7 +12,7 @@ public class BooleanArgument extends Argument<Boolean> {
         super(name);
 
         this.hasValue = true;
-        this.value = value;
+        this.value = true;
     }
 
     @Override
@@ -23,5 +23,13 @@ public class BooleanArgument extends Argument<Boolean> {
     @Override
     public ArgumentType getType() {
         return ArgumentType.BOOLEAN;
+    }
+
+
+    @Override
+    public String toString() {
+        return "BooleanArgument{" +
+                name + "=true" +
+                '}';
     }
 }

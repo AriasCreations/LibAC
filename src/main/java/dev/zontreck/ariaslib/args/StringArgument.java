@@ -19,4 +19,12 @@ public class StringArgument extends Argument<String> {
     public ArgumentType getType() {
         return ArgumentType.STRING;
     }
+
+    @Override
+    public String toString() {
+        return "StringArgument{" +
+                name + "=" +
+                value +
+                '}';
+    }
 }
