@@ -19,9 +19,9 @@ public class ProgressBar
     }
 
     /**
-     * Print out a progress bar
+     * Build a progress bar
      * <br/><br/>
-     * your text here [=========             ] 40% your text here
+     * your text here [=========>             ] 40% your text here
      * @param percent The percentage
      * @param beforeText
      * @param afterText
