@@ -25,9 +25,10 @@ public class ProgressBar
      * @param percent The percentage
      * @param beforeText
      * @param afterText
+     * @return ProgressBar as a String
      */
-    public static void printProgressBar(int percent, String beforeText, String afterText) {
-        PrintStream out = System.out;
+    public static String printProgressBar(int percent, String beforeText, String afterText) {
+        StringBuilder sb = new StringBuilder();
         int consoleWidth = getConsoleWidth();
         int barWidth = Math.min(consoleWidth - beforeText.length() - afterText.length() - 4, DEFAULT_BAR_WIDTH);
 
@@ -35,26 +36,26 @@ public class ProgressBar
         int progressBarLength = (int) ((double) percent / 100 * barWidth);
 
         // Print before text
-        out.print(beforeText);
+        sb.append(beforeText);
 
         // Print progress bar
-        out.print("[");
+        sb.append("[");
         for (int i = 0; i < barWidth; i++) {
             if (i < progressBarLength) {
-                out.print("=");
-            } else {
-                out.print(" ");
+                sb.append("=");
+            }else if(i==progressBarLength) sb.append(">");
+            else {
+                sb.append(" ");
             }
         }
-        out.print("]");
+        sb.append("]");
 
         // Print percentage
-        out.print(" " + percent + "%");
+        sb.append(" " + percent + "%");
 
         // Print after text
-        out.print(afterText);
+        sb.append(afterText);
 
-        // Move cursor to next line
-        out.println();
+        return sb.toString();
     }
 }
