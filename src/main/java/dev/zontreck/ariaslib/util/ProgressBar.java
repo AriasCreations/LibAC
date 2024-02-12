@@ -11,6 +11,11 @@ public class ProgressBar
     private static final int DEFAULT_BAR_WIDTH = 50;
 
     /**
+     * Reserved spaces for the brackets, and the carrot, and the percent value.
+     */
+    private static final int PROGRESS_BAR_RESERVED=5;
+
+    /**
      * Always will return 80
      * @return 80
      */
@@ -30,7 +35,7 @@ public class ProgressBar
     public static String printProgressBar(int percent, String beforeText, String afterText) {
         StringBuilder sb = new StringBuilder();
         int consoleWidth = getConsoleWidth();
-        int barWidth = Math.min(consoleWidth - beforeText.length() - afterText.length() - 4, DEFAULT_BAR_WIDTH);
+        int barWidth = Math.min(consoleWidth - beforeText.length() - afterText.length() - PROGRESS_BAR_RESERVED, DEFAULT_BAR_WIDTH);
 
         // Calculate progress
         int progressBarLength = (int) ((double) percent / 100 * barWidth);
