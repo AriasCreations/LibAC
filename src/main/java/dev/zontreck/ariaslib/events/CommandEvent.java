@@ -1,7 +1,7 @@
 package dev.zontreck.ariaslib.events;
 
-import dev.zontreck.eventsbus.Cancellable;
 import dev.zontreck.eventsbus.Event;
+import dev.zontreck.eventsbus.annotations.Cancellable;
 
 import java.util.ArrayList;
 import java.util.List;
