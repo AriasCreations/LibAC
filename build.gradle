@@ -59,12 +59,6 @@ repositories {
 
 dependencies {
 
-    
-    implementation "dev.zontreck:EventsBus:${Bus_API}.${Bus_Patch}"
-    api "dev.zontreck:EventsBus:${Bus_API}.${Bus_Patch}:sources"
-
-    testImplementation platform('org.junit:junit-bom:5.9.1')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
 }
 
 def MAVEN_PASSWORD_PROPERTY = "AriasCreationsMavenPassword"
