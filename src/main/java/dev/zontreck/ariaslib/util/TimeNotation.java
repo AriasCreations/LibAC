@@ -31,14 +31,18 @@ public class TimeNotation
 
     @Override
     public String toString() {
-        return
-                Pluralize(Years, "year") + ", " +
-                        Pluralize(Months, "month") + ", " +
-                        Pluralize(Weeks, "week") + ", " +
-                        Pluralize(Days, "day") + ", " +
-                        Pluralize(Hours, "hour") + ", " +
-                        Pluralize(Minutes, "minute") + ", " +
-                        Pluralize(Seconds, "second");
+        String str =
+                someOrNone(Years,Pluralize(Years, "year") + ", ") +
+                        someOrNone(Months, Pluralize(Months, "month") + ", ") +
+                        someOrNone(Weeks, Pluralize(Weeks, "week") + ", ") +
+                        someOrNone(Days, Pluralize(Days, "day") + ", ") +
+                        someOrNone(Hours, Pluralize(Hours, "hour") + ", ") +
+                        someOrNone(Minutes, Pluralize(Minutes, "minute") + ", ") +
+                        someOrNone(Seconds, Pluralize(Seconds, "second"));
+
+        if(str == ""){
+            return "No Seconds";
+        } else return str;
     }
 
     /**
@@ -49,7 +53,30 @@ public class TimeNotation
      */
     private String Pluralize(int num, String str)
     {
-        return num + " " + (num > 1 ? str+"s" : str);
+        return num + " " + ((num > 1) ? str+"s" : str);
+    }
+
+    /**
+     * A simple function to test a number, return a string, or return nothing at all.
+     * @param num The number to check
+     * @param str The string to return if the number is greater than zero
+     * @return Str if num >1, or empty string
+     */
+    private String someOrNone(int num, String str)
+    {
+        if(num > 0) return str;
+        else return "";
+    }
+    /**
+     * A simple function to test a number, return a string, or return something else.
+     * @param num The number to check
+     * @param str The string to return if the number is greater than zero
+     * @return Str if num >1, or other string
+     */
+    private String someOrOther(int num, String str, String other)
+    {
+        if(num > 0) return str;
+        else return other;
     }
 
     /**
