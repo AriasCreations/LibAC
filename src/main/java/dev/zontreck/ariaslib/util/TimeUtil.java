@@ -55,6 +55,11 @@ public class TimeUtil
         return new TimeNotation(years, month, week, day, hour, minute, seconds);
     }
 
+    /**
+     * Convert a time notation to seconds
+     * @param notation Notation to convert
+     * @return Total seconds
+     */
     public static int notationToSeconds(TimeNotation notation)
     {
         int seconds = 0;
