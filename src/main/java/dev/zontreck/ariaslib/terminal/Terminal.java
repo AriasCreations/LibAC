@@ -1,6 +1,5 @@
 package dev.zontreck.ariaslib.terminal;
 
-import dev.zontreck.ariaslib.util.DelayedExecutorService;
 import dev.zontreck.ariaslib.util.EnvironmentUtils;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -20,7 +19,7 @@ public class Terminal {
 		if ( EnvironmentUtils.isRunningInsideDocker ( ) )
 			return 0;
 		running.set ( true );
-		DelayedExecutorService.getInstance ( ).schedule ( new ConsolePrompt ( ) , 1 );
+		//DelayedExecutorService.getInstance ( ).schedule ( new ConsolePrompt ( ) , 1 );
 
 
 		return ID.getAndIncrement ( );

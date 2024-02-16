@@ -2,7 +2,6 @@ package dev.zontreck.ariaslib.util;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-@Deprecated
 public class Progress
 {
 	private int maximum;
