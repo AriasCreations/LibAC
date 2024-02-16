@@ -55,6 +55,21 @@ public class TimeUtil
         return new TimeNotation(years, month, week, day, hour, minute, seconds);
     }
 
+    public static int notationToSeconds(TimeNotation notation)
+    {
+        int seconds = 0;
+
+        seconds += (notation.Years * YEAR);
+        seconds += (notation.Months * MONTH);
+        seconds += (notation.Weeks * WEEK);
+        seconds += (notation.Days * DAY);
+        seconds += (notation.Hours * HOUR);
+        seconds += (notation.Minutes * MINUTE);
+        seconds += (notation.Seconds);
+
+        return seconds;
+    }
+
 
     public static final int SECOND;
     public static final int MINUTE;

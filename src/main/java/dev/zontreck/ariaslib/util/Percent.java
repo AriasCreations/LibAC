@@ -2,7 +2,6 @@ package dev.zontreck.ariaslib.util;
 
 import java.io.PrintStream;
 
-@Deprecated
 public class Percent
 {
 	int current;
