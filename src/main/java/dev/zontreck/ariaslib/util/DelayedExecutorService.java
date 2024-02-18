@@ -20,14 +20,7 @@ public class DelayedExecutorService {
     private static ScheduledThreadPoolExecutor repeater;
     static{
         inst=new DelayedExecutorService();
-        repeater = new ScheduledThreadPoolExecutor(8);
-
-        repeater.scheduleAtFixedRate(new Runnable() {
-            @Override
-            public void run() {
-                DelayedExecutorService.getInstance().onTick();
-            }
-        }, 250L, 250L, TimeUnit.MILLISECONDS);
+        repeater = new ScheduledThreadPoolExecutor(2);
     }
     private DelayedExecutorService(){}
 
@@ -55,13 +48,13 @@ public class DelayedExecutorService {
     public static void setup()
     {
         stopRepeatingThread();
-        repeater = new ScheduledThreadPoolExecutor(8);
-        repeater.schedule(new Runnable() {
+        repeater = new ScheduledThreadPoolExecutor(16);
+        repeater.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
                 DelayedExecutorService.getInstance().onTick();
             }
-        }, 1L, TimeUnit.SECONDS);
+        }, 1L, 1L, TimeUnit.SECONDS);
     }
 
     /**
@@ -70,6 +63,7 @@ public class DelayedExecutorService {
     public static void stop()
     {
         RUN.set(false);
+        stopRepeatingThread();
     }
 
     /**
